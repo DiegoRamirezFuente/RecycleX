@@ -7,9 +7,9 @@ def detectar_tapones(imagen, umbral_area=500):
     
     # Definir rangos de color para los tapones
     colores = {
-        "Rojo": [(0, 120, 70), (10, 255, 255)],
+        #"Rojo": [(0, 120, 70), (10, 255, 255)],
         "Azul": [(86, 47, 0), (132, 255, 255)],
-        "Verde": [(40, 40, 40), (80, 255, 255)],
+        #"Verde": [(40, 40, 40), (80, 255, 255)],
         "Amarillo": [(10, 100, 100), (30, 255, 255)],
         #"Naranja": [(10, 100, 100), (25, 255, 255)]
     }
