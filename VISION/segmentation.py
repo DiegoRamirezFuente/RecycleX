@@ -7,11 +7,10 @@ def detectar_tapones(imagen, umbral_area=500):
     
     # Definir rangos de color para los tapones
     colores = {
-        #"Rojo": [(0, 120, 70), (10, 255, 255)],
-        "Azul": [(86, 47, 0), (132, 255, 255)],
-        #"Verde": [(40, 40, 40), (80, 255, 255)],
+        "Rojo": [(167.22, 48.45, 129.54), (5.4, 255, 255)],
         "Amarillo": [(10, 100, 100), (30, 255, 255)],
-        #"Naranja": [(10, 100, 100), (25, 255, 255)]
+        "Verde": [(28.44, 120.36, 75.735), (78.12, 255, 255)],
+        "Azul": [(86, 47, 0), (132, 255, 255)],
     }
     
     resultado = {}
@@ -41,7 +40,7 @@ def detectar_tapones(imagen, umbral_area=500):
     return imagen, resultado
 
 # Cargar imagen
-imagen = cv2.imread("tapones.jpg")
+imagen = cv2.imread("tapones5.jpg")
 
 # Redimensionar imagen para mejor visualización
 escala = 0.3
