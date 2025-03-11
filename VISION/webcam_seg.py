@@ -7,7 +7,7 @@ def detectar_tapones(imagen, umbral_area=500):
     
     # Definir rangos de color para los tapones
     colores = {
-        "Rojo": [(167.22, 48.45, 129.54), (5.4, 255, 255)],
+        #"Rojo": [(4.32, 26.52, 64.51), (172, 255, 239.19)],
         "Amarillo": [(10, 100, 100), (30, 255, 255)],
         "Verde": [(28.44, 120.36, 75.735), (78.12, 255, 255)],
         "Azul": [(86, 47, 0), (132, 255, 255)],
@@ -40,7 +40,7 @@ def detectar_tapones(imagen, umbral_area=500):
     return imagen, resultado
 
 # Captura de video desde la webcam
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 while True:
     ret, frame = cap.read()
