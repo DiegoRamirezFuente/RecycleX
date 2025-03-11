@@ -1,0 +1,33 @@
+# Obtener la dirección IP asignada al equipo
+hostname -I  
+
+# Mostrar información detallada sobre las interfaces de red
+ip a  
+
+# Eliminar una dirección IP específica de la interfaz de red
+sudo ip addr del 169.254.12.25/32 dev enp8s0  
+
+# Asignar una nueva dirección IP a la interfaz de red
+sudo ip addr add 169.254.12.25/24 dev enp8s0  
+
+# Limpiar todas las direcciones IP asignadas a la interfaz de red
+sudo ip addr flush dev enp8s0  
+
+# Reasignar la dirección IP después de la limpieza
+sudo ip addr add 169.254.12.25/24 dev enp8s0  
+
+# Verificar que la dirección IP se ha asignado correctamente
+ip a  
+hostname -I  
+
+# Comprobar la conectividad con el robot mediante un ping
+ping 169.254.12.28  
+
+# Eliminar el directorio 'build' (para recompilar desde cero)
+rm -rf build  
+
+# Generar archivos de compilación con CMake
+cmake -B build  
+
+# Compilar el proyecto y ejecutar el script de Python
+cmake --build build --target run_python_script  
