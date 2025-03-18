@@ -40,7 +40,7 @@ def detectar_tapones(imagen, umbral_area=500):
     return imagen, resultado
 
 # Cargar imagen
-imagen = cv2.imread("tapones5.jpg")
+imagen = cv2.imread("/resources/tapones5.jpg")
 
 # Redimensionar imagen para mejor visualización
 escala = 0.3

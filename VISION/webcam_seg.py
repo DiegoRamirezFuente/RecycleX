@@ -40,7 +40,8 @@ def detectar_tapones(imagen, umbral_area=500):
     return imagen, resultado
 
 # Captura de video desde la webcam
-cap = cv2.VideoCapture(1)
+#cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 
 while True:
     ret, frame = cap.read()
