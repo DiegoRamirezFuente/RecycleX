@@ -2,7 +2,7 @@ import cv2
 import os
 from datetime import datetime
 
-# Índice de la cámara USB detectado antes (ajústalo según lo que encontraste)
+# Índice de la cámara USB
 indice_camara = 0
 
 # Crear carpeta para guardar fotos
