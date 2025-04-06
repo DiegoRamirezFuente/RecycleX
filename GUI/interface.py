@@ -7,10 +7,10 @@ from PyQt5.QtCore import Qt, QTimer
 
 # ---- VALORES PREDEFINIDOS MODIFICABLES POR EL PROGRAMADOR ----
 valores = {
-    'box1': {'valor': 100, 'x': 1225, 'y': 180},
-    'box2': {'valor': 200, 'x': 1225, 'y': 420},
-    'box3': {'valor': 300, 'x': 1675, 'y': 180},
-    'box4': {'valor': 400, 'x': 1675, 'y': 420},
+    'box1': {'valor': 100, 'x': 1010, 'y': 180},
+    'box2': {'valor': 200, 'x': 1010, 'y': 420},
+    'box3': {'valor': 300, 'x': 1475, 'y': 180},
+    'box4': {'valor': 400, 'x': 1475, 'y': 420},
     'boxRed': {'valor': 'Red', 'x': 240, 'y': 690}
 }
 
@@ -34,7 +34,7 @@ class StartScreen(QWidget):
         painter.drawPixmap(0, 0, self.width(), self.height(), self.background_image)
         painter.setPen(QColor(255, 0, 0))
         painter.setBrush(QColor(255, 0, 0, 100))
-        painter.drawEllipse(500, 620, 900, 150)
+        #painter.drawEllipse(500, 620, 900, 150)
 
     def start_app(self):
         self.main_window.setCurrentIndex(1)
@@ -90,7 +90,7 @@ class MainScreen(QWidget):
         painter.drawPixmap(0, 0, self.width(), self.height(), self.background_image)
         painter.setPen(QColor(255, 0, 0))
         painter.setBrush(QColor(255, 0, 0, 100))
-        painter.drawEllipse(1750, 830, 120, 120)
+        #painter.drawEllipse(1750, 830, 120, 120)
 
     def update_frame(self):
         ret, frame = self.capture.read()
