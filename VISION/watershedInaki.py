@@ -5,7 +5,7 @@ from scipy import ndimage as ndi
 import math
 
 # --- 1. Cargar y preprocesar ------------------------
-img = cv2.imread("tapones5.jpg")
+img = cv2.imread("taponesjuntos.jpg")
 cv2.imshow("Paso 1 - Original", img)
 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -30,7 +30,7 @@ dist = cv2.distanceTransform(bin_clean, cv2.DIST_L2, 5)
 dist_vis = cv2.normalize(dist, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
 cv2.imshow("Paso 6 - Transformada de distancia", dist_vis)
 
-coords = peak_local_max(dist, min_distance=30,
+coords = peak_local_max(dist, min_distance=20,
                         threshold_rel=0.4, labels=bin_clean)
 # dibujar marcadores sobre la imagen original
 mark_vis = img.copy()
