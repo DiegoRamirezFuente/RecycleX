@@ -27,7 +27,6 @@ def capturar_imagenes():
             tcp_poses = json.load(f)
     
     cap = cv2.VideoCapture(0)
-    cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.75)
 
     if not cap.isOpened():
         print("❌ Error al abrir la cámara.")
