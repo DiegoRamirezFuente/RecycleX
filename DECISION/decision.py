@@ -61,14 +61,23 @@ class CapSelector:
         return int(cx), int(cy)
 
     @classmethod
-    def select_best_contour(cls, contours: list) -> np.ndarray or None:
+    def select_best_contour(cls, contours: list, min_area: float = 1000.0) -> np.ndarray or None:
         """
-        Selecciona y devuelve el contorno con mayor circularidad.
-        Si la lista está vacía, devuelve None.
+        Selecciona el contorno con mayor circularidad que también supere un área mínima.
+        
+        Args:
+            contours (list): Lista de contornos (np.ndarray).
+            min_area (float): Área mínima requerida para considerar un contorno válido.
+        
+        Returns:
+            np.ndarray: Contorno con mayor circularidad y área suficiente, o None.
         """
         best = None
         best_score = -1.0
         for cnt in contours:
+            area = cv2.contourArea(cnt)
+            if area < min_area:
+                continue
             score = cls.compute_circularity(cnt)
             if score > best_score:
                 best_score = score
@@ -76,12 +85,18 @@ class CapSelector:
         return best
 
     @classmethod
-    def get_best_centroid(cls, contours: list) -> (int, int) or None:
+    def get_best_centroid(cls, contours: list, min_area: float = 1000.0) -> (int, int) or None:
         """
-        Selecciona el contorno más circular y devuelve sus coordenadas (x, y).
-        Devuelve None si no hay contornos.
+        Selecciona el contorno más circular con área suficiente y devuelve su centroide.
+        
+        Args:
+            contours (list): Lista de contornos.
+            min_area (float): Área mínima para considerar un contorno.
+        
+        Returns:
+            (int, int) | None: Coordenadas del centroide, o None si no hay candidato válido.
         """
-        best = cls.select_best_contour(contours)
+        best = cls.select_best_contour(contours, min_area)
         if best is None:
             return None
         return cls.compute_centroid(best)

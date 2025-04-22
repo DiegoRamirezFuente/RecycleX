@@ -22,6 +22,8 @@ contours = [
     for pts in raw_contours
 ]
 
+min_area=100.0
+
 # Ejecutar la selección utilizando CapSelector
 best_contour = CapSelector.select_best_contour(contours)
 
