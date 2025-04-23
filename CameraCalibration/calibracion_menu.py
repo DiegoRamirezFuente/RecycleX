@@ -26,8 +26,12 @@ def capturar_imagenes():
         with open(tcp_poses_file, 'r') as f:
             tcp_poses = json.load(f)
     
+<<<<<<< HEAD
     cap = cv2.VideoCapture(1)
     cap.set(cv2.CAP_PROP_EXPOSURE, 150.0)
+=======
+    cap = cv2.VideoCapture(0)
+>>>>>>> 7815710be66713c53d1c1ee5a7e4ad2979e5d043
 
     if not cap.isOpened():
         print("❌ Error al abrir la cámara.")
