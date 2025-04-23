@@ -12,9 +12,9 @@ handeye_file = "handeye_params.json"
 tcp_poses_file = "tcp_poses.json"  # Nuevo archivo para guardar poses del TCP
 chessboard_size = (7, 7)
 square_size = 0.025
-predefined_z = 0.2  # Altura preestablecida para el TCP sobre el tapón
-tcp_to_cam_offset = [2.0, 0.0, 0.0]  # x, y, z en metros
-tcp_to_cam_rot_offset = [0.0, 0.0, 0.0]  # rx, ry, rz en radianes
+predefined_z = 0.3  # Altura preestablecida para el TCP sobre el tapón
+tcp_to_cam_offset = [-0.074, 0.0, -0.035]  # x, y, z en metros
+tcp_to_cam_rot_offset = [0.6450934905627825, -3.0645195408800863, 0.0076346200951948485]  # rx, ry, rz en radianes
 # ----------------------------
 
 def capturar_imagenes():
