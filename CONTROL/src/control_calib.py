@@ -14,13 +14,12 @@ DIGITAL_OUTPUT_PIN = 4
 SPEED = 0.3
 ACCELERATION = 0.2
 WAIT_TIME = 2
-PREDEFINED_Z = 0.2
+PREDEFINED_Z = 0.3
 
 # Ruta a los JSON
-json_dir = os.path.join("..", "CameraCalibration")
-camera_params_file = os.path.join(json_dir, "camera_params.json")
-handeye_file = os.path.join(json_dir, "handeye_params.json")
-tcp_poses_file = os.path.join(json_dir, "tcp_poses.json")
+camera_params_file = "camera_params.json"
+handeye_file = "handeye_params.json"
+tcp_poses_file = "tcp_poses.json"
 
 # --- FUNCIONES ---
 
@@ -83,9 +82,9 @@ if __name__ == "__main__":
         q2 = [1.380723476409912, -1.6959606609740199, 0.17434245744814092, 
               -1.6387573681273402, -1.5071643034564417, -0.43589860597719365]
         move_joint(con_ctr, con_rcv, q2, 1.0, 1.4)
+        
+        comfortable_q = [-0.038115290797877656, -0.41458715972364596, 1.6180241743670862, 2.889211098622066, -1.1969863123337179, -0.05512171977058779]
 
-        comfortable_q = [1.3809702396392822, -1.6433397732176722, 1.6180241743670862, 
-                         -1.544386738245823, -1.5217412153827112, -0.43589860597719365]
         current_pose = move_joint(con_ctr, con_rcv, comfortable_q, 1.0, 1.4)
         if current_pose is None:
             raise Exception("No se pudo mover a la posición cómoda. Abortando.")
