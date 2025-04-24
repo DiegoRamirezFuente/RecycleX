@@ -35,3 +35,18 @@ else:
     print(f"Tapón más circular encontrado:")
     print(f"  Centroide (x, y): ({x}, {y})")
     print(f"  Circularidad: {circ:.3f}")
+
+import cv2
+
+# Mostrar resultados
+img = np.zeros((1600, 902), dtype=np.uint8)
+output = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+if best_contour is not None:
+    cv2.drawContours(output, [best_contour], -1, (0, 255, 0), 2)
+    print(f"Contorno seleccionado: área = {cv2.contourArea(best_contour):.2f}, circularidad = {CapSelector.compute_circularity(best_contour):.3f}")
+else:
+    print("No se encontró ningún contorno válido.")
+
+cv2.imshow("Mejor contorno", output)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
