@@ -1,0 +1,274 @@
+[
+    {
+        "bounding_box": [
+            573,
+            506,
+            768,
+            719
+        ],
+        "centroid": [
+            670,
+            612
+        ],
+        "area": 41535,
+        "confidence": 0.9877,
+        "class": 1,
+        "color": "green"
+    },
+    {
+        "bounding_box": [
+            426,
+            681,
+            672,
+            938
+        ],
+        "centroid": [
+            549,
+            809
+        ],
+        "area": 63222,
+        "confidence": 0.9795,
+        "class": 7,
+        "color": "green"
+    },
+    {
+        "bounding_box": [
+            394,
+            507,
+            575,
+            696
+        ],
+        "centroid": [
+            484,
+            601
+        ],
+        "area": 34209,
+        "confidence": 0.9779,
+        "class": 6,
+        "color": "green"
+    },
+    {
+        "bounding_box": [
+            856,
+            1554,
+            1074,
+            1754
+        ],
+        "centroid": [
+            965,
+            1654
+        ],
+        "area": 43600,
+        "confidence": 0.9702,
+        "class": 7,
+        "color": "green"
+    },
+    {
+        "bounding_box": [
+            727,
+            998,
+            911,
+            1182
+        ],
+        "centroid": [
+            819,
+            1090
+        ],
+        "area": 33856,
+        "confidence": 0.9683,
+        "class": 6,
+        "color": "green"
+    },
+    {
+        "bounding_box": [
+            563,
+            1131,
+            787,
+            1360
+        ],
+        "centroid": [
+            675,
+            1245
+        ],
+        "area": 51296,
+        "confidence": 0.9672,
+        "class": 2,
+        "color": "green"
+    },
+    {
+        "bounding_box": [
+            393,
+            1418,
+            649,
+            1670
+        ],
+        "centroid": [
+            521,
+            1544
+        ],
+        "area": 64512,
+        "confidence": 0.9666,
+        "class": 7,
+        "color": "green"
+    },
+    {
+        "bounding_box": [
+            857,
+            730,
+            1084,
+            957
+        ],
+        "centroid": [
+            970,
+            843
+        ],
+        "area": 51529,
+        "confidence": 0.9612,
+        "class": 2,
+        "color": "green"
+    },
+    {
+        "bounding_box": [
+            794,
+            485,
+            988,
+            693
+        ],
+        "centroid": [
+            891,
+            589
+        ],
+        "area": 40352,
+        "confidence": 0.953,
+        "class": 1,
+        "color": "green"
+    },
+    {
+        "bounding_box": [
+            414,
+            994,
+            600,
+            1177
+        ],
+        "centroid": [
+            507,
+            1085
+        ],
+        "area": 34038,
+        "confidence": 0.9401,
+        "class": 0,
+        "color": "green"
+    },
+    {
+        "bounding_box": [
+            863,
+            1138,
+            1092,
+            1355
+        ],
+        "centroid": [
+            977,
+            1246
+        ],
+        "area": 49693,
+        "confidence": 0.9393,
+        "class": 2,
+        "color": "green"
+    },
+    {
+        "bounding_box": [
+            655,
+            690,
+            865,
+            909
+        ],
+        "centroid": [
+            760,
+            799
+        ],
+        "area": 45990,
+        "confidence": 0.9324,
+        "class": 2,
+        "color": "green"
+    },
+    {
+        "bounding_box": [
+            845,
+            947,
+            1027,
+            1140
+        ],
+        "centroid": [
+            936,
+            1043
+        ],
+        "area": 35126,
+        "confidence": 0.8539,
+        "class": 1,
+        "color": "green"
+    },
+    {
+        "bounding_box": [
+            801,
+            1338,
+            1043,
+            1595
+        ],
+        "centroid": [
+            922,
+            1466
+        ],
+        "area": 62194,
+        "confidence": 0.6989,
+        "class": 5,
+        "color": "green"
+    },
+    {
+        "bounding_box": [
+            934,
+            498,
+            1090,
+            694
+        ],
+        "centroid": [
+            1012,
+            596
+        ],
+        "area": 30576,
+        "confidence": 0.647,
+        "class": 1,
+        "color": "green"
+    },
+    {
+        "bounding_box": [
+            668,
+            1392,
+            828,
+            1603
+        ],
+        "centroid": [
+            748,
+            1497
+        ],
+        "area": 33760,
+        "confidence": 0.3368,
+        "class": 7,
+        "color": "green"
+    },
+    {
+        "bounding_box": [
+            415,
+            1306,
+            614,
+            1462
+        ],
+        "centroid": [
+            514,
+            1384
+        ],
+        "area": 31044,
+        "confidence": 0.2851,
+        "class": 4,
+        "color": "green"
+    }
+]
