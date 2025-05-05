@@ -9,8 +9,9 @@ from typing import Tuple
 valores = {
     'box1': {'valor': 100, 'x': 1010, 'y': 185},
     'box2': {'valor': 200, 'x': 1010, 'y': 425},
-    'box3': {'valor': 300, 'x': 1455, 'y': 185},
-    'box4': {'valor': 400, 'x': 1455, 'y': 425},
+    'box3': {'valor': 300, 'x': 1370, 'y': 185},
+    'box4': {'valor': 400, 'x': 1370, 'y': 425},
+    'box5': {'valor': 400, 'x': 1620, 'y': 305},
     'boxColor': {'valor': 'Green', 'x': 240, 'y': 710}
 }
 
@@ -63,6 +64,7 @@ class MainScreen(QWidget):
         self.box2.setText("0")
         self.box3.setText("0")
         self.box4.setText("0")
+        self.box5.setText("0")
         self.boxColor.setText(color)
         self.boxCoord.setText(f"({centroide[0]}, {centroide[1]}) px")
 
@@ -106,7 +108,7 @@ class MainScreen(QWidget):
         # Fuente base
         font = QFont()
         
-        # Estilo para box1 a box4
+        # Estilo para box1 a box5
         style_boxes = """
             background-color: transparent;
             border: none;
@@ -115,7 +117,7 @@ class MainScreen(QWidget):
         """
         font.setPointSize(45)
 
-        for box_name in ['box1', 'box2', 'box3', 'box4']:
+        for box_name in ['box1', 'box2', 'box3', 'box4', 'box5']:
             config = valores[box_name]
             box = QLineEdit(self)
             box.setText(str(config['valor']))
