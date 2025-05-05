@@ -1,11 +1,11 @@
 import sys
 import cv2
-from PyQt5.QtWidgets import (QApplication, QWidget, QStackedWidget, QLabel, QLineEdit)
-from PyQt5.QtGui import QPixmap, QPainter, QColor, QImage, QFont
-from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtWidgets import QApplication, QWidget, QStackedWidget, QLabel, QLineEdit
+from PyQt5.QtGui import QPixmap, QPainter, QImage, QFont
+from PyQt5.QtCore import Qt
 from typing import Tuple
 
-# ---- VALORES PREDEFINIDOS MODIFICABLES POR EL PROGRAMADOR ----
+# ---- VALORES PREDEFINIDOS ----
 valores = {
     'box1': {'valor': 100, 'x': 1010, 'y': 185},
     'box2': {'valor': 200, 'x': 1010, 'y': 425},
@@ -14,7 +14,7 @@ valores = {
     'boxColor': {'valor': 'Red', 'x': 240, 'y': 710}
 }
 
-# ---- LABEL CLICKEABLE INVISIBLE ----
+# ---- LABEL CLICKEABLE ----
 class ClickableLabel(QLabel):
     def __init__(self, callback, parent=None):
         super().__init__(parent)
@@ -31,7 +31,6 @@ class StartScreen(QWidget):
         self.main_window = main_window
         self.background_image = QPixmap("resources/start.png")
 
-        # Área clickeable START (antes botón)
         self.start_button = ClickableLabel(self.start_app, self)
         self.start_button.setGeometry(470, 645, 910, 140)
 
@@ -49,7 +48,6 @@ class MainScreen(QWidget):
         self.main_window = main_window
         self.background_image = QPixmap("resources/main.png")
 
-        # Área clickeable FINISH (antes botón)
         self.finish_button = ClickableLabel(self.finish_app, self)
         self.finish_button.setGeometry(1690, 860, 110, 110)
 
@@ -58,38 +56,54 @@ class MainScreen(QWidget):
 
         self.create_value_boxes()
 
-        self.capture = cv2.VideoCapture(0)
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.update_frame)
-        self.timer.start(20)
+    def set_cap_info(self, centroide: Tuple[int, int], bounding_box: Tuple[int, int, int, int], color: str):
+        print(f"[INFO] Recibido centroide: {centroide}, bounding box: {bounding_box}, color: {color}")
 
-    def set_cap_info(self, centroide: Tuple[int, int], color: str):
-        print(f"[INFO] Recibido centroide: {centroide}, color: {color}")
-
-        # Mostrar coordenadas del centroide en un campo (puedes crear un box específico si lo deseas)
-        self.box1.setText("100") 
+        self.box1.setText("100")
         self.box2.setText("200")
-
-        # Mostrar color en boxColor
         self.boxColor.setText(color)
         self.boxCoord.setText(f"({centroide[0]}, {centroide[1]})")
+
+        # 1. Cargar imagen original
+        imagen = cv2.imread("tapones3.jpg")
+        if imagen is None:
+            print("[ERROR] No se pudo cargar la imagen.")
+            return
+
+        # --- Bounding Box (x1, y1, x2, y2) ---
+        x1, y1, x2, y2 = bounding_box
+        cx, cy = centroide
+
+        # 2. Dibujar el bounding box en la imagen original (verde)
+        cv2.rectangle(imagen, (x1, y1), (x2, y2), (0, 255, 0), 10)
+        cv2.circle(imagen, (cx, cy), 20, (0, 255, 255), -1)
+
+        # 3. Rotar imagen 90° en el sentido de las agujas del reloj
+        imagen = cv2.rotate(imagen, cv2.ROTATE_90_CLOCKWISE)
+
+        # Nuevo centroide después de rotar
+        new_cx = cy
+        new_cy = imagen.shape[1] - cx
+
+        print(f"[INFO] Centroide rotado: ({new_cx}, {new_cy})")
+
+        # 4. Redimensionar imagen rotada
+        alto, ancho = imagen.shape[:2]
+        nuevo_ancho = 800
+        nuevo_alto = int((nuevo_ancho / ancho) * alto)
+        imagen = cv2.resize(imagen, (nuevo_ancho, nuevo_alto))
+
+        # 5. Convertir y mostrar la imagen en Qt
+        imagen_rgb = cv2.cvtColor(imagen, cv2.COLOR_BGR2RGB)
+        h, w, ch = imagen_rgb.shape
+        bytes_per_line = ch * w
+        qt_img = QImage(imagen_rgb.data, w, h, bytes_per_line, QImage.Format_RGB888)
+        self.camera_label.setPixmap(QPixmap.fromImage(qt_img))
 
     def create_value_boxes(self):
         font = QFont()
         font.setPointSize(20)
-        
         for box_name, config in valores.items():
-            # Crear caja para mostrar coordenadas del centroide debajo de boxColor
-            self.boxCoord = QLineEdit(self)
-            self.boxCoord.setReadOnly(True)
-            self.boxCoord.setGeometry(valores['boxColor']['x'], valores['boxColor']['y'] + 90, 200, 80)  # Misma X, +90 en Y
-            self.boxCoord.setStyleSheet("""
-                background-color: white;
-                border: 2px solid black;
-                font-size: 30px;
-            """)
-            self.boxCoord.setFont(font)
-
             box = QLineEdit(self)
             box.setText(str(config['valor']))
             box.setReadOnly(True)
@@ -102,25 +116,24 @@ class MainScreen(QWidget):
             box.setFont(font)
             setattr(self, box_name, box)
 
+        self.boxCoord = QLineEdit(self)
+        self.boxCoord.setReadOnly(True)
+        self.boxCoord.setGeometry(valores['boxColor']['x'], valores['boxColor']['y'] + 90, 200, 80)
+        self.boxCoord.setStyleSheet("""
+            background-color: white;
+            border: 2px solid black;
+            font-size: 30px;
+        """)
+        self.boxCoord.setFont(font)
+
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.drawPixmap(0, 0, self.width(), self.height(), self.background_image)
 
-    def update_frame(self):
-        ret, frame = self.capture.read()
-        if ret:
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            h, w, ch = frame.shape
-            bytes_per_line = ch * w
-            convert_to_Qt_format = QImage(frame.data, w, h, bytes_per_line, QImage.Format_RGB888)
-            self.camera_label.setPixmap(QPixmap.fromImage(convert_to_Qt_format))
-
     def finish_app(self):
-        self.timer.stop()
-        self.capture.release()
         self.main_window.setCurrentIndex(0)
 
-# ---- MAIN ----
+# ---- MAIN APP ----
 class MainApp(QStackedWidget):
     def __init__(self):
         super().__init__()
@@ -130,18 +143,18 @@ class MainApp(QStackedWidget):
         self.addWidget(self.main_screen)
         self.setCurrentIndex(0)
 
-        # Una sola ejecución de la lógica de decisión
-        from decision import CapDecisionMaker  # Asegúrate de importar correctamente tu clase
-
+        # Lógica de decisión
+        from decision import CapDecisionMaker
         decision = CapDecisionMaker("detecciones_tapones.json", min_area=2000, min_confidence=0.9)
         result = decision.get_best_cap_info()
 
         if result:
-            centroide, _, color = result
-            self.main_screen.set_cap_info(centroide, color)
+            centroide, bounding_box, color = result
+            self.main_screen.set_cap_info(centroide, bounding_box, color)
         else:
             print("[INFO] No se encontró ningún tapón válido.")
 
+# ---- INICIO ----
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainApp()
