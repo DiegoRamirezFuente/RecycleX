@@ -48,8 +48,7 @@ class CapDecisionMaker:
             return None
         centroid = tuple(best['centroid'])
         cap_class = best['class']
-        cap_color = best['color']
-        return centroid, cap_class, cap_color
+        return centroid, cap_class
 
     def draw_selected_on_image(self, image_path: str):
         best = self.select_best_cap()
@@ -95,8 +94,8 @@ if __name__ == "__main__":
     result = decision.get_best_cap_info()
 
     if result:
-        centroid, cap_class, cap_color = result
-        print(f"Tapón seleccionado en {centroid} | Clase: {cap_class} | Color: {cap_color}")
-        decision.draw_selected_on_image("tapones3.jpg")
+        centroid, cap_class = result
+        print(f"Tapón seleccionado en {centroid} | Clase: {cap_class}")
+        decision.draw_selected_on_image("taponesjuntos.jpg")
     else:
         print("No se encontró ningún tapón válido.")

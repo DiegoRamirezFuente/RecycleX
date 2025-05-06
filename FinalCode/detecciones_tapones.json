@@ -12,8 +12,7 @@
         ],
         "area": 41535,
         "confidence": 0.9877,
-        "class": 1,
-        "color": "green"
+        "class": 1
     },
     {
         "bounding_box": [
@@ -28,8 +27,7 @@
         ],
         "area": 63222,
         "confidence": 0.9795,
-        "class": 7,
-        "color": "green"
+        "class": 7
     },
     {
         "bounding_box": [
@@ -44,8 +42,7 @@
         ],
         "area": 34209,
         "confidence": 0.9779,
-        "class": 6,
-        "color": "green"
+        "class": 6
     },
     {
         "bounding_box": [
@@ -60,8 +57,7 @@
         ],
         "area": 43600,
         "confidence": 0.9702,
-        "class": 7,
-        "color": "green"
+        "class": 7
     },
     {
         "bounding_box": [
@@ -76,8 +72,7 @@
         ],
         "area": 33856,
         "confidence": 0.9683,
-        "class": 6,
-        "color": "Red"
+        "class": 6
     },
     {
         "bounding_box": [
@@ -92,8 +87,7 @@
         ],
         "area": 51296,
         "confidence": 0.9672,
-        "class": 2,
-        "color": "green"
+        "class": 2
     },
     {
         "bounding_box": [
@@ -108,8 +102,7 @@
         ],
         "area": 64512,
         "confidence": 0.9666,
-        "class": 7,
-        "color": "green"
+        "class": 7
     },
     {
         "bounding_box": [
@@ -124,8 +117,7 @@
         ],
         "area": 51529,
         "confidence": 0.9612,
-        "class": 2,
-        "color": "green"
+        "class": 2
     },
     {
         "bounding_box": [
@@ -140,8 +132,7 @@
         ],
         "area": 40352,
         "confidence": 0.953,
-        "class": 1,
-        "color": "green"
+        "class": 1
     },
     {
         "bounding_box": [
@@ -156,8 +147,7 @@
         ],
         "area": 34038,
         "confidence": 0.9401,
-        "class": 0,
-        "color": "green"
+        "class": 0
     },
     {
         "bounding_box": [
@@ -172,8 +162,7 @@
         ],
         "area": 49693,
         "confidence": 0.9393,
-        "class": 2,
-        "color": "green"
+        "class": 2
     },
     {
         "bounding_box": [
@@ -188,8 +177,7 @@
         ],
         "area": 45990,
         "confidence": 0.9324,
-        "class": 2,
-        "color": "green"
+        "class": 2
     },
     {
         "bounding_box": [
@@ -204,8 +192,7 @@
         ],
         "area": 35126,
         "confidence": 0.8539,
-        "class": 1,
-        "color": "green"
+        "class": 1
     },
     {
         "bounding_box": [
@@ -220,8 +207,7 @@
         ],
         "area": 62194,
         "confidence": 0.6989,
-        "class": 5,
-        "color": "green"
+        "class": 5
     },
     {
         "bounding_box": [
@@ -236,8 +222,7 @@
         ],
         "area": 30576,
         "confidence": 0.647,
-        "class": 1,
-        "color": "green"
+        "class": 1
     },
     {
         "bounding_box": [
@@ -252,8 +237,7 @@
         ],
         "area": 33760,
         "confidence": 0.3368,
-        "class": 7,
-        "color": "green"
+        "class": 7
     },
     {
         "bounding_box": [
@@ -268,7 +252,6 @@
         ],
         "area": 31044,
         "confidence": 0.2851,
-        "class": 4,
-        "color": "green"
+        "class": 4
     }
 ]

@@ -48,9 +48,12 @@ class CapDecisionMaker:
             return None
         centroid = tuple(best['centroid'])
         bounding_box = tuple(best['bounding_box'])  # (x1, y1, x2, y2)
-        cap_color = best['color']
-        print(f"Bounding Box: {bounding_box}")
+
+        # Usa 'color' si existe, si no usa 'class' como texto
+        cap_color = best.get('color', f"Clase {best.get('class', '?')}")
+
         return centroid, bounding_box, cap_color
+
 
     def resize_to_fit_screen(self, image, max_width=1920, max_height=1080):
         height, width = image.shape[:2]
@@ -77,7 +80,9 @@ class CapDecisionMaker:
         cv2.rectangle(image_copy, (x1, y1), (x2, y2), (0, 255, 0), 3)
         cv2.circle(image_copy, (cx, cy), 5, (0, 0, 255), -1)
 
-        label = f"Clase: {best['class']} | Conf: {best['confidence']:.2f} | Color: {best['color']}"
+        cap_color = best.get('color', f"Clase {best.get('class', '?')}")
+        label = f"Clase: {best.get('class', '?')} | Conf: {best.get('confidence', 0):.2f} | Color: {cap_color}"
+
         cv2.putText(image_copy, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
 
         # Redimensionar imagen para que quepa en pantalla
