@@ -42,13 +42,25 @@ class CapDecisionMaker:
 
         return best_cap
 
-    def get_best_cap_info(self) -> Optional[Tuple[Tuple[int, int], int, str]]:
+    def get_best_cap_info(self) -> Optional[Tuple[Tuple[int, int], Tuple[int, int, int, int], str]]:
         best = self.select_best_cap()
         if best is None:
             return None
         centroid = tuple(best['centroid'])
-        cap_class = best['class']
-        return centroid, cap_class
+        bounding_box = tuple(best['bounding_box'])  # (x1, y1, x2, y2)
+
+        # Usa 'color' si existe, si no usa 'class' como texto
+        cap_color = best.get('color', f"Clase {best.get('class', '?')}")
+
+        return centroid, bounding_box, cap_color
+
+
+    def resize_to_fit_screen(self, image, max_width=1920, max_height=1080):
+        height, width = image.shape[:2]
+        scale = min(max_width / width, max_height / height, 1.0)  # No agranda, solo reduce
+        new_width = int(width * scale)
+        new_height = int(height * scale)
+        return cv2.resize(image, (new_width, new_height), interpolation=cv2.INTER_AREA)
 
     def draw_selected_on_image(self, image_path: str):
         best = self.select_best_cap()
@@ -56,26 +68,27 @@ class CapDecisionMaker:
             print("[INFO] No se encontró ningún tapón válido para dibujar.")
             return
 
-        # Cargar imagen (copia, no se modifica la original)
         image = cv2.imread(image_path)
         if image is None:
             print(f"[ERROR] No se pudo cargar la imagen: {image_path}")
             return
 
-        # Dibujar bounding box y centroide
         x1, y1, x2, y2 = best['bounding_box']
         cx, cy = best['centroid']
-
-        image_copy = image.copy()  # trabajar sobre copia
+        image_copy = image.copy()
 
         cv2.rectangle(image_copy, (x1, y1), (x2, y2), (0, 255, 0), 3)
         cv2.circle(image_copy, (cx, cy), 5, (0, 0, 255), -1)
 
-        label = f"Clase: {best['class']} Conf: {best['confidence']:.2f}"
+        cap_color = best.get('color', f"Clase {best.get('class', '?')}")
+        label = f"Clase: {best.get('class', '?')} | Conf: {best.get('confidence', 0):.2f} | Color: {cap_color}"
+
         cv2.putText(image_copy, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
 
-        # Mostrar imagen en ventana
-        cv2.imshow("Tapón seleccionado", image_copy)
+        # Redimensionar imagen para que quepa en pantalla
+        image_resized = self.resize_to_fit_screen(image_copy)
+
+        cv2.imshow("Tapón seleccionado", image_resized)
         print("[INFO] Pulsa ENTER para cerrar la ventana.")
         while True:
             key = cv2.waitKey(0)
@@ -85,17 +98,16 @@ class CapDecisionMaker:
 
 
 #####################################################################################
-                            #EJEMPLO DE USO#
+# EJEMPLO DE USO
 #####################################################################################
-#IMPORTANTE MANTENER min_confianza en 0.9
 if __name__ == "__main__":
     print("Ejemplo de uso de CapDecisionMaker")
     decision = CapDecisionMaker("detecciones_tapones.json", min_area=2000, min_confidence=0.9)
     result = decision.get_best_cap_info()
 
     if result:
-        centroid, cap_class = result
-        print(f"Tapón seleccionado en {centroid} | Clase: {cap_class}")
-        decision.draw_selected_on_image("taponesjuntos.jpg")
+        centroid, bounding_box, cap_color = result
+        print(f"Tapón seleccionado en {centroid} | Bounding Box: {bounding_box} | Color: {cap_color}")
+        decision.draw_selected_on_image("tapones3.jpg")
     else:
         print("No se encontró ningún tapón válido.")
