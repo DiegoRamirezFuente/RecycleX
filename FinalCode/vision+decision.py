@@ -2,7 +2,7 @@ from visionYOLO import TaponesDetector
 from decision import CapDecisionMaker
 
 # Ruta de la imagen a procesar
-IMAGE_PATH = "tapones3.jpg"
+IMAGE_PATH = "taponesjuntos.jpg"
 
 # Archivos de salida
 JSON_OUTPUT_PATH = "detecciones_tapones.json"
