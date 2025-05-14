@@ -1,7 +1,7 @@
 from visionYOLO import TaponesDetector
 from decision import CapDecisionMaker
 from camaraAcceso import Camara
-from movRobot import RobotController
+#from movRobot import RobotController
 
 # Ruta de la foto tomada por la cámara
 IMAGE_PATH = "taponesjuntos.jpg"
@@ -46,7 +46,7 @@ def main():
         if selected:
             centroid, bbox, color = selected
             print(f"[INFO] Tapón seleccionado: Centroid={centroid}, BBox={bbox}, Color={color}")
-            decision.draw_selected_on_image(IMAGE_PATH)
+            #decision.draw_selected_on_image(IMAGE_PATH)
         else:
             print("[INFO] No se encontró ningún tapón válido.")
 

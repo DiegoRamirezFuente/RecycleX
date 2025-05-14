@@ -60,7 +60,7 @@ def main():
                 centroid, bbox, color = selected
                 px, py = centroid
                 print(f"[INFO] Tapón elegido en píxeles: X={px}, Y={py}, Color={color}")
-                decision.draw_selected_on_image(IMAGE_PATH)
+                #decision.draw_selected_on_image(IMAGE_PATH)
 
                 # 5️⃣ Movimiento hacia el tapón
                 print("[INFO] Moviendo robot hacia el tapón detectado...")

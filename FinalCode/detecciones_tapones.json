@@ -1,242 +1,152 @@
 [
     {
         "bounding_box": [
-            546,
-            494,
-            793,
-            726
+            85,
+            111,
+            180,
+            223
         ],
         "centroid": [
-            669,
-            610
+            132,
+            167
         ],
-        "area": 57304,
-        "confidence": 0.9581,
+        "area": 10640,
+        "confidence": 0.9681,
+        "class": 0
+    },
+    {
+        "bounding_box": [
+            283,
+            265,
+            390,
+            371
+        ],
+        "centroid": [
+            336,
+            318
+        ],
+        "area": 11342,
+        "confidence": 0.964,
+        "class": 1
+    },
+    {
+        "bounding_box": [
+            105,
+            217,
+            199,
+            306
+        ],
+        "centroid": [
+            152,
+            261
+        ],
+        "area": 8366,
+        "confidence": 0.9559,
+        "class": 2
+    },
+    {
+        "bounding_box": [
+            195,
+            356,
+            290,
+            451
+        ],
+        "centroid": [
+            242,
+            403
+        ],
+        "area": 9025,
+        "confidence": 0.9548,
+        "class": 2
+    },
+    {
+        "bounding_box": [
+            303,
+            366,
+            411,
+            477
+        ],
+        "centroid": [
+            357,
+            421
+        ],
+        "area": 11988,
+        "confidence": 0.954,
+        "class": 1
+    },
+    {
+        "bounding_box": [
+            115,
+            415,
+            224,
+            479
+        ],
+        "centroid": [
+            169,
+            447
+        ],
+        "area": 6976,
+        "confidence": 0.9278,
         "class": 7
     },
     {
         "bounding_box": [
-            651,
-            275,
-            881,
-            510
+            271,
+            162,
+            380,
+            271
         ],
         "centroid": [
-            766,
-            392
+            325,
+            216
         ],
-        "area": 54050,
-        "confidence": 0.9473,
-        "class": 7
-    },
-    {
-        "bounding_box": [
-            949,
-            456,
-            1185,
-            708
-        ],
-        "centroid": [
-            1067,
-            582
-        ],
-        "area": 59472,
-        "confidence": 0.9093,
+        "area": 11881,
+        "confidence": 0.8936,
         "class": 1
     },
     {
         "bounding_box": [
-            1250,
-            287,
-            1477,
-            488
+            146,
+            87,
+            242,
+            195
         ],
         "centroid": [
-            1363,
-            387
+            194,
+            141
         ],
-        "area": 45627,
-        "confidence": 0.772,
-        "class": 1
+        "area": 10368,
+        "confidence": 0.8757,
+        "class": 5
     },
     {
         "bounding_box": [
-            766,
-            493,
-            918,
-            651
-        ],
-        "centroid": [
-            842,
-            572
-        ],
-        "area": 24016,
-        "confidence": 0.7629,
-        "class": 1
-    },
-    {
-        "bounding_box": [
-            405,
-            778,
-            550,
-            951
-        ],
-        "centroid": [
-            477,
-            864
-        ],
-        "area": 25085,
-        "confidence": 0.7037,
-        "class": 1
-    },
-    {
-        "bounding_box": [
-            493,
-            310,
-            633,
-            480
-        ],
-        "centroid": [
-            563,
-            395
-        ],
-        "area": 23800,
-        "confidence": 0.6933,
-        "class": 7
-    },
-    {
-        "bounding_box": [
-            370,
-            332,
-            527,
-            486
-        ],
-        "centroid": [
-            448,
+            103,
+            304,
+            210,
             409
         ],
-        "area": 24178,
-        "confidence": 0.6659,
+        "centroid": [
+            156,
+            356
+        ],
+        "area": 11235,
+        "confidence": 0.8646,
         "class": 7
     },
     {
         "bounding_box": [
-            389,
-            666,
-            492,
-            787
-        ],
-        "centroid": [
-            440,
-            726
-        ],
-        "area": 12463,
-        "confidence": 0.6051,
-        "class": 6
-    },
-    {
-        "bounding_box": [
-            515,
-            762,
-            705,
-            938
-        ],
-        "centroid": [
-            610,
-            850
-        ],
-        "area": 33440,
-        "confidence": 0.5551,
-        "class": 1
-    },
-    {
-        "bounding_box": [
-            397,
-            454,
-            603,
-            666
-        ],
-        "centroid": [
-            500,
-            560
-        ],
-        "area": 43672,
-        "confidence": 0.546,
-        "class": 2
-    },
-    {
-        "bounding_box": [
-            1285,
-            455,
-            1480,
-            623
-        ],
-        "centroid": [
-            1382,
-            539
-        ],
-        "area": 32760,
-        "confidence": 0.522,
-        "class": 2
-    },
-    {
-        "bounding_box": [
-            0,
-            605,
+            338,
             60,
-            1051
+            390,
+            174
         ],
         "centroid": [
-            30,
-            828
+            364,
+            117
         ],
-        "area": 26760,
-        "confidence": 0.521,
-        "class": 2
-    },
-    {
-        "bounding_box": [
-            0,
-            6,
-            37,
-            286
-        ],
-        "centroid": [
-            18,
-            146
-        ],
-        "area": 10360,
-        "confidence": 0.4881,
-        "class": 2
-    },
-    {
-        "bounding_box": [
-            974,
-            680,
-            1095,
-            899
-        ],
-        "centroid": [
-            1034,
-            789
-        ],
-        "area": 26499,
-        "confidence": 0.3287,
-        "class": 2
-    },
-    {
-        "bounding_box": [
-            1079,
-            666,
-            1239,
-            888
-        ],
-        "centroid": [
-            1159,
-            777
-        ],
-        "area": 35520,
-        "confidence": 0.2561,
+        "area": 5928,
+        "confidence": 0.5434,
         "class": 7
     }
 ]

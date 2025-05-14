@@ -11,7 +11,8 @@ class Camara:
 
     def abrir(self):
         """Abre el dispositivo de vídeo."""
-        self.cap = cv2.VideoCapture(self.index)
+        #self.cap = cv2.VideoCapture(self.index)
+        self.cap = cv2.VideoCapture(2, cv2.CAP_V4L2)
         if not self.cap.isOpened():
             raise RuntimeError(f"No se pudo abrir la cámara con índice {self.index}")
 
