@@ -1,6 +1,7 @@
 from visionYOLO import TaponesDetector
 from decision import CapDecisionMaker
 from camaraAcceso import Camara
+from movRobot import RobotController
 
 # Ruta de la foto tomada por la cámara
 IMAGE_PATH = "taponesjuntos.jpg"
