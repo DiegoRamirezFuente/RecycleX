@@ -99,6 +99,29 @@ class RobotController:
         if contact:
             self.con_io.setStandardDigitalOut(self.digital_output_pin, True)
         return contact
+    
+    def descend_with_force(self, duration: float = 2.0, force: float = -10.0, control_freq: float = 500.0):
+        """
+        Desciende aplicando fuerza controlada con forceMode, luego activa la salida digital.
+        """
+        task_frame = [0, 0, 0, 0, 0, 0]
+        selection_vector = [0, 0, 1, 0, 0, 0]  # solo fuerza Z
+        wrench = [0, 0, force, 0, 0, 0]  # fuerza hacia abajo
+        force_type = 2  # tipo de fuerza
+        limits = [2, 2, 1.5, 1, 1, 1]  # límites de movimiento permitidos
+
+        cycles = int(duration * control_freq)
+        dt = 1.0 / control_freq
+
+        for i in range(cycles):
+            t_start = self.con_ctrl.initPeriod()
+            self.con_ctrl.forceMode(task_frame, selection_vector, wrench, force_type, limits)
+            self.con_ctrl.waitPeriod(t_start)
+
+        self.con_ctrl.forceModeStop()
+        self.con_io.setStandardDigitalOut(self.digital_output_pin, True)
+        return True
+
 
     def retract(self, dz: float=0.1, speed: float=0.1, accel: float=0.5):
         """Eleva el TCP en dz metros linealmente."""

@@ -67,9 +67,13 @@ def main():
                 robot.move_to_pixel(px, py)
 
                 # 6️⃣ Descenso hasta contacto
+                #if robot.descend_until_contact():
+                #    print("[INFO] Contacto detectado. Pin activado.")
+                #    time.sleep(1.0)
+                # 6️⃣ Descenso con fuerza controlada
                 if robot.descend_until_contact():
-                    print("[INFO] Contacto detectado. Pin activado.")
-                    time.sleep(1.0)
+                    print("[INFO] Contacto detectado. Aplicando fuerza adicional...")
+                    robot.descend_with_force(duration=2.0, force=-10.0)  # solo aplica fuerza
 
                     # 7️⃣ Retracción y recogida
                     print("[INFO] Retrayendo TCP...")
