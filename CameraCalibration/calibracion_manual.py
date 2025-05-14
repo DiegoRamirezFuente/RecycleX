@@ -10,7 +10,7 @@ from sklearn.linear_model import LinearRegression
 # PASO 5 - Probar modo 3
 
 JSON_PATH = "calibracion_ur3.json"
-Z_FIJA = 300.0  # Altura constante
+Z_FIJA = 0.23495259079391306 # Altura constante
 
 # === VISIÓN ===
 def detectar_tapones(imagen, umbral_area=500):
@@ -79,7 +79,7 @@ def predecir_tcp(modelo, u, v):
 
 # === MAIN ===
 def main():
-    cam = cv2.VideoCapture(0)
+    cam = cv2.VideoCapture(2, cv2.CAP_V4L2)  # Usa Logitech y backend V4L2
     modo = input("Selecciona modo: (1) Detectar píxeles, (2) Calibrar y probar: ")
 
     if modo == "1":
@@ -104,11 +104,9 @@ def main():
         # Aquí introduces los valores manualmente (matriz final)
         calibration_data = [
             # [u, v, X, Y]
-            [960, 540, 500.0, 200.0],
-            [1060, 540, 520.0, 200.0],
-            [960, 640, 500.0, 220.0],
-            [860, 540, 480.0, 200.0],
-            [960, 440, 500.0, 180.0],
+            [109, 234, 0.09443086163351676, -0.288733727432007],
+            [307, 230, 0.08441153439626911, -0.3686754448031324],
+            [424, 52, 0.14445115464768518, -0.42885776705790457],
         ]
 
         entrenar_y_guardar(calibration_data)
