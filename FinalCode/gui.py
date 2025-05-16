@@ -1,18 +1,36 @@
 import sys
 import cv2
 from PyQt5.QtWidgets import (QApplication, QWidget, QStackedWidget, QLabel, QLineEdit)
-from PyQt5.QtGui import QPixmap, QPainter, QColor, QImage, QFont
+from PyQt5.QtGui import QPixmap, QPainter, QImage, QFont
 from PyQt5.QtCore import Qt, QTimer
 from typing import Tuple
 
 # ---- VALORES PREDEFINIDOS MODIFICABLES POR EL PROGRAMADOR ----
 valores = {
-    'box1': {'valor': 100, 'x': 1010, 'y': 185},
-    'box2': {'valor': 200, 'x': 1010, 'y': 425},
-    'box3': {'valor': 300, 'x': 1455, 'y': 185},
-    'box4': {'valor': 400, 'x': 1455, 'y': 425},
-    'boxColor': {'valor': 'Red', 'x': 240, 'y': 710}
+    'box1': {'valor': 0, 'x': 980, 'y': 185},
+    'box2': {'valor': 0, 'x': 980, 'y': 425},
+    'box3': {'valor': 0, 'x': 1295, 'y': 185},
+    'box4': {'valor': 0, 'x': 1295, 'y': 425},
+    'box5': {'valor': 0, 'x': 1610, 'y': 185},
+    'box6': {'valor': 0, 'x': 1610, 'y': 425},
+    'box7': {'valor': 0, 'x': 980, 'y': 665},
+    'boxSum': {'valor': 0, 'x': 1495, 'y': 665},
+    'boxColor': {'valor': 'Green', 'x': 240, 'y': 710}
 }
+
+# ---- Mapa de Clase a Color ----
+def clase_a_color(clase_str: str) -> Tuple[str, str]:
+    mapa = {
+        "Clase 0": ("Red", "#FF0000"),
+        "Clase 1": ("Red", "#FF0000"),
+        "Clase 2": ("Yellow", "#FFFF00"),
+        "Clase 3": ("Green", "#00FF00"),
+        "Clase 4": ("Blue", "#0000FF"),
+        "Clase 5": ("White", "#FFFFFF"),
+        "Clase 6": ("Black", "#000000"),
+        "Clase 7": ("Rest", "#888888"),
+    }
+    return mapa.get(clase_str, (clase_str, "#CCCCCC"))
 
 # ---- LABEL CLICKEABLE INVISIBLE ----
 class ClickableLabel(QLabel):
@@ -31,7 +49,6 @@ class StartScreen(QWidget):
         self.main_window = main_window
         self.background_image = QPixmap("resources/start.png")
 
-        # Área clickeable START (antes botón)
         self.start_button = ClickableLabel(self.start_app, self)
         self.start_button.setGeometry(470, 645, 910, 140)
 
@@ -49,7 +66,6 @@ class MainScreen(QWidget):
         self.main_window = main_window
         self.background_image = QPixmap("resources/main.png")
 
-        # Área clickeable FINISH (antes botón)
         self.finish_button = ClickableLabel(self.finish_app, self)
         self.finish_button.setGeometry(1690, 860, 110, 110)
 
@@ -66,41 +82,80 @@ class MainScreen(QWidget):
     def set_cap_info(self, centroide: Tuple[int, int], color: str):
         print(f"[INFO] Recibido centroide: {centroide}, color: {color}")
 
-        # Mostrar coordenadas del centroide en un campo (puedes crear un box específico si lo deseas)
-        self.box1.setText("100") 
-        self.box2.setText("200")
+        # Aquí se actualizarán los valores de las cajas 1 a 6 con variables externas (ejemplo aquí con 0)
+        # En un futuro reemplaza estos valores con las variables que recibas del otro script
+        valores_reales = {
+            'box1': 0,
+            'box2': 0,
+            'box3': 0,
+            'box4': 0,
+            'box5': 0,
+            'box6': 0,
+            'box7': 0
+        }
+        for box_name, valor in valores_reales.items():
+            getattr(self, box_name).setText(str(valor))
 
-        # Mostrar color en boxColor
-        self.boxColor.setText(color)
-        self.boxCoord.setText(f"({centroide[0]}, {centroide[1]})")
+        # Actualizar suma en boxSum
+        suma = sum(valores_reales.values())
+        self.boxSum.setText(str(suma))
+
+        # Traducir clase a nombre y color hexadecimal
+        nombre_color, color_hex = clase_a_color(color)
+
+        # Actualizar caja de color con color de fondo
+        self.boxColor.setText(nombre_color)
+        self.boxColor.setStyleSheet(f"""
+            background-color: transparent;
+            border: none;
+            font-size: 30px;
+        """)
+
+        # Actualizar coordenadas con formato y sin borde
+        self.boxCoord.setText(f"({centroide[0]}, {centroide[1]}) px")
 
     def create_value_boxes(self):
         font = QFont()
         font.setPointSize(20)
-        
-        for box_name, config in valores.items():
-            # Crear caja para mostrar coordenadas del centroide debajo de boxColor
-            self.boxCoord = QLineEdit(self)
-            self.boxCoord.setReadOnly(True)
-            self.boxCoord.setGeometry(valores['boxColor']['x'], valores['boxColor']['y'] + 90, 200, 80)  # Misma X, +90 en Y
-            self.boxCoord.setStyleSheet("""
-                background-color: white;
-                border: 2px solid black;
-                font-size: 30px;
-            """)
-            self.boxCoord.setFont(font)
 
+        # Crear cajas para box1 a box7 y boxSum
+        for box_name in ['box1', 'box2', 'box3', 'box4', 'box5', 'box6', 'box7', 'boxSum']:
+            config = valores[box_name]
             box = QLineEdit(self)
             box.setText(str(config['valor']))
             box.setReadOnly(True)
             box.setGeometry(config['x'], config['y'], 100, 80)
             box.setStyleSheet("""
                 background-color: white;
-                border: 2px solid black;
-                font-size: 50px;
+                border: none;
+                font-size: 30px;
             """)
             box.setFont(font)
             setattr(self, box_name, box)
+
+        # Caja adicional para coordenadas (bajo boxColor)
+        self.boxCoord = QLineEdit(self)
+        self.boxCoord.setReadOnly(True)
+        self.boxCoord.setGeometry(290, 815, 200, 80)
+        self.boxCoord.setStyleSheet("""
+            background-color: white;
+            border: none;
+            font-size: 30px;
+        """)
+        self.boxCoord.setFont(font)
+
+        # Crear caja para boxColor (color con fondo)
+        config_color = valores['boxColor']
+        self.boxColor = QLineEdit(self)
+        self.boxColor.setText(config_color['valor'])
+        self.boxColor.setReadOnly(True)
+        self.boxColor.setGeometry(config_color['x'], config_color['y'], 200, 80)
+        self.boxColor.setStyleSheet("""
+            border: none;
+            font-size: 30px;
+            color: black;
+        """)
+        self.boxColor.setFont(font)
 
     def paintEvent(self, event):
         painter = QPainter(self)
