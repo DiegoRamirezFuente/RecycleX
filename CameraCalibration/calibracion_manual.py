@@ -1,21 +1,22 @@
+import sys
 import cv2
 import numpy as np
 import json
+from PyQt5.QtWidgets import (
+    QApplication, QMainWindow, QLabel, QVBoxLayout, QWidget, QPushButton, QInputDialog
+)
+from PyQt5.QtGui import QImage, QPixmap, QPainter, QColor, QFont
+from PyQt5.QtCore import QTimer
 from sklearn.linear_model import LinearRegression
 
-# PASO 1 - Poner el robot en una buena posición en donde vaya a tomar imagenes de la caja de tapones. Ajustar también Z_FIJA en el código
-# PASO 2 - Anotar las coordenadas del TCP (en píxeles será el centro de la imagen)
-# PASO 3 - Poner mínimo 2 tapones visibles por la cámara, ejecutar modo 1 del código y anotar el píxel central de cada tapón
-# PASO 4 - Rellenar la matriz del modo 2 con las coordenadas anotadas y ejecutar el modo 2
-# PASO 5 - Probar modo 3
-
 JSON_PATH = "calibracion_ur3.json"
-Z_FIJA = 0.23495259079391306 # Altura constante
+Z_FIJA = 0.23495259079391306
 
-# === VISIÓN ===
 def detectar_tapones(imagen, umbral_area=500):
     hsv = cv2.cvtColor(imagen, cv2.COLOR_BGR2HSV)
     colores = {
+        "Rojo1": [(0, 100, 100), (10, 255, 255)],
+        "Rojo2": [(160, 100, 100), (179, 255, 255)],
         "Amarillo": [(10, 100, 100), (30, 255, 255)],
         "Verde": [(35, 80, 80), (85, 255, 255)],
         "Azul": [(90, 50, 50), (130, 255, 255)],
@@ -38,14 +39,10 @@ def detectar_tapones(imagen, umbral_area=500):
             x, y, w, h = cv2.boundingRect(contorno)
             u = x + w // 2
             v = y + h // 2
-            tapones_centrales.append((u, v))
-            cv2.circle(imagen, (u, v), 5, (255, 255, 255), -1)
-            cv2.rectangle(imagen, (x, y), (x + w, y + h), (255, 255, 255), 2)
-            cv2.putText(imagen, color, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+            tapones_centrales.append((color, u, v))
 
-    return imagen, tapones_centrales
+    return tapones_centrales
 
-# === CALIBRACIÓN CON MATRIZ MANUAL ===
 def entrenar_y_guardar(calibration_data):
     data = np.array(calibration_data)
     u, v, x, y = data[:, 0], data[:, 1], data[:, 2], data[:, 3]
@@ -77,51 +74,74 @@ def predecir_tcp(modelo, u, v):
     Z = modelo["z_fija"]
     return X, Y, Z
 
-# === MAIN ===
-def main():
-    cam = cv2.VideoCapture(2, cv2.CAP_V4L2)  # Usa Logitech y backend V4L2
-    modo = input("Selecciona modo: (1) Detectar píxeles, (2) Calibrar y probar: ")
+class DetectorGUI(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Detección de Tapones - PyQt")
+        self.setGeometry(100, 100, 800, 600)
 
-    if modo == "1":
-        print("🔍 MODO DETECCIÓN: Mostrando píxeles de los tapones detectados. Presiona Q para salir.")
-        while True:
-            ret, frame = cam.read()
-            if not ret:
-                break
+        self.label = QLabel("Cámara")
+        self.label.setScaledContents(True)
+        self.btn_calibrar = QPushButton("Calibrar y Probar")
+        self.btn_calibrar.clicked.connect(self.calibrar)
 
-            imagen, centros = detectar_tapones(frame)
-            for i, (u, v) in enumerate(centros):
-                cv2.putText(imagen, f"{i+1}: ({u},{v})", (u + 10, v), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
+        layout = QVBoxLayout()
+        layout.addWidget(self.label)
+        layout.addWidget(self.btn_calibrar)
 
-            cv2.imshow("Detección", imagen)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+        central_widget = QWidget()
+        central_widget.setLayout(layout)
+        self.setCentralWidget(central_widget)
 
-        cam.release()
-        cv2.destroyAllWindows()
+        self.cap = cv2.VideoCapture(0)
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.actualizar_frame)
+        self.timer.start(30)
 
-    elif modo == "2":
-        # Aquí introduces los valores manualmente (matriz final)
+        self.modelo = None
+
+    def actualizar_frame(self):
+        ret, frame = self.cap.read()
+        if not ret:
+            return
+
+        centros = detectar_tapones(frame)
+
+        for i, (color, u, v) in enumerate(centros):
+            cv2.putText(frame, f"{i+1}:({u},{v})", (u + 10, v), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
+
+        rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        h, w, ch = rgb.shape
+        bytes_per_line = ch * w
+        img_qt = QImage(rgb.data, w, h, bytes_per_line, QImage.Format_RGB888)
+        self.label.setPixmap(QPixmap.fromImage(img_qt))
+
+    def calibrar(self):
         calibration_data = [
-            # [u, v, X, Y]
             [109, 234, 0.09443086163351676, -0.288733727432007],
             [307, 230, 0.08441153439626911, -0.3686754448031324],
             [424, 52, 0.14445115464768518, -0.42885776705790457],
         ]
-
         entrenar_y_guardar(calibration_data)
-        modelo = cargar_modelo()
+        self.modelo = cargar_modelo()
 
         while True:
-            entrada = input("\nIntroduce coordenadas u,v para predecir (o 'salir'): ")
-            if entrada.lower() == 'salir':
+            entrada, ok = QInputDialog.getText(self, "Predicción", "Introduce coordenadas u,v:")
+            if not ok or entrada.lower() == "salir":
                 break
             try:
                 u_px, v_px = map(float, entrada.strip().split(","))
-                X, Y, Z = predecir_tcp(modelo, u_px, v_px)
+                X, Y, Z = predecir_tcp(self.modelo, u_px, v_px)
                 print(f"→ Coordenadas TCP: X = {X:.2f} mm, Y = {Y:.2f} mm, Z = {Z:.2f} mm")
-            except:
-                print("❌ Entrada inválida. Usa formato: u,v")
+            except Exception as e:
+                print("❌ Entrada inválida:", e)
+
+    def closeEvent(self, event):
+        self.cap.release()
+        event.accept()
 
 if __name__ == "__main__":
-    main()
+    app = QApplication(sys.argv)
+    ventana = DetectorGUI()
+    ventana.show()
+    sys.exit(app.exec_())
