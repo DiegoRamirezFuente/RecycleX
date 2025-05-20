@@ -1,0 +1,62 @@
+[
+    {
+        "bounding_box": [
+            124,
+            138,
+            209,
+            221
+        ],
+        "centroid": [
+            166,
+            179
+        ],
+        "area": 7055,
+        "confidence": 0.9764,
+        "class": 1
+    },
+    {
+        "bounding_box": [
+            137,
+            219,
+            222,
+            300
+        ],
+        "centroid": [
+            179,
+            259
+        ],
+        "area": 6885,
+        "confidence": 0.9664,
+        "class": 0
+    },
+    {
+        "bounding_box": [
+            221,
+            155,
+            288,
+            220
+        ],
+        "centroid": [
+            254,
+            187
+        ],
+        "area": 4355,
+        "confidence": 0.9482,
+        "class": 4
+    },
+    {
+        "bounding_box": [
+            169,
+            43,
+            253,
+            129
+        ],
+        "centroid": [
+            211,
+            86
+        ],
+        "area": 7224,
+        "confidence": 0.6167,
+        "class": 3
+    }
+]
