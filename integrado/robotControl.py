@@ -24,12 +24,13 @@ class RobotController:
 
         # Calibración píxeles→mundo
         default_calib = {
-            "coef_x": [-5.818951947422773e-05, -0.00037554940466236344],
-            "intercept_x": 0.18865207994720062,
-            "coef_y": [-0.0004022572004555222, 7.369792023301156e-05],
-            "intercept_y": -0.26213300591687977,
+            "coef_x": [-7.14671540350273e-05, -0.000397897100259422],
+            "intercept_x": 0.1977189940615601,
+            "coef_y": [-0.00039706857701473535, 6.979248057165074e-05],
+            "intercept_y": -0.2570262178800905,
             "z_fija": 0.23495259079391306
         }
+        
         self.calibration = calibration or default_calib
 
         # Interfaces RTDE
@@ -105,7 +106,7 @@ class RobotController:
         Desciende aplicando fuerza controlada con forceMode, luego activa la salida digital.
         """
         task_frame = [0, 0, 0, 0, 0, 0]
-        selection_vector = [0, 0, 1, 0, 0, 0]  # solo fuerza Z
+        selection_vector = [0, 0, -1, 0, 0, 0]  # solo fuerza Z
         wrench = [0, 0, force, 0, 0, 0]  # fuerza hacia abajo
         force_type = 2  # tipo de fuerza
         limits = [2, 2, 1.5, 1, 1, 1]  # límites de movimiento permitidos

@@ -1,113 +1,111 @@
+# decisionMaker.py
 import json
 import cv2
 from typing import List, Tuple, Dict, Optional
 
 class CapDecisionMaker:
-    def __init__(self, json_path: str, min_area: float = 1000.0, min_confidence: float = 0.9):
+    def __init__(self, json_path: str, min_area: float = 1000.0, min_confidence: float = 0.9): # Como en tu archivo
         self.json_path = json_path
         self.min_area = min_area
         self.min_confidence = min_confidence
-        self.detections = self.load_detections()
+        # self.detections = self.load_detections() # Cargar bajo demanda
 
-    def load_detections(self) -> List[Dict]:
-        with open(self.json_path, 'r') as f:
-            data = json.load(f)
-        return data
+    def load_detections(self) -> List[Dict]: # Como en tu archivo
+        try:
+            with open(self.json_path, 'r') as f:
+                data = json.load(f)
+            return data
+        except FileNotFoundError:
+            print(f"ERROR: Archivo de detecciones '{self.json_path}' no encontrado.")
+            return []
+        except json.JSONDecodeError:
+            print(f"ERROR: Error al decodificar JSON desde '{self.json_path}'. ¿Está vacío o corrupto?")
+            return []
 
-    def is_valid(self, detection: Dict) -> bool:
+
+    def is_valid(self, detection: Dict) -> bool: # Como en tu archivo
         return (
-            detection['area'] >= self.min_area and
-            detection['confidence'] >= self.min_confidence
+            detection.get('area', 0) >= self.min_area and
+            detection.get('confidence', 0) >= self.min_confidence
         )
 
-    def compute_squareness(self, bbox: List[int]) -> float:
+    def compute_squareness(self, bbox: List[int]) -> float: # Como en tu archivo
         x1, y1, x2, y2 = bbox
         width = x2 - x1
         height = y2 - y1
-        if max(width, height) == 0:
+        if width <= 0 or height <= 0: # Asegurar dimensiones positivas
             return 0.0
         return 1.0 - abs(width - height) / max(width, height)
 
-    def select_best_cap(self) -> Optional[Dict]:
-        best_score = -1.0
+    def select_best_cap(self) -> Optional[Dict]: # Como en tu archivo
+        self.detections = self.load_detections() # Carga las detecciones más recientes
+        best_score = -1.0  # Inicializar con un valor que cualquier tapón válido pueda superar
         best_cap = None
 
-        for det in self.detections:
-            if not self.is_valid(det):
-                continue
+        valid_detections = [det for det in self.detections if self.is_valid(det)]
+        if not valid_detections:
+            return None
+
+        for det in valid_detections:
+            # Criterio principal: "cuadratura" del bounding box
+            # Tapones más cuadrados suelen ser mejores detecciones frontales.
             score = self.compute_squareness(det['bounding_box'])
+
+            # Opcional: añadir otros factores al score, como confianza o área (con pesos)
+            # score += det['confidence'] * 0.2 # Darle un peso a la confianza
+            # score += (det['area'] / 10000) * 0.1 # Darle un peso al área (normalizada)
+
             if score > best_score:
                 best_score = score
                 best_cap = det
-
         return best_cap
 
-    def get_best_cap_info(self) -> Optional[Tuple[Tuple[int, int], Tuple[int, int, int, int], str]]:
+
+    def get_best_cap_info(self) -> Optional[Tuple[Tuple[int, int], Tuple[int, int, int, int], str]]: # Como en tu archivo
         best = self.select_best_cap()
         if best is None:
             return None
         centroid = tuple(best['centroid'])
-        bounding_box = tuple(best['bounding_box'])  # (x1, y1, x2, y2)
-
-        # Usa 'color' si existe, si no usa 'class' como texto
-        cap_color = best.get('color', f"Clase {best.get('class', '?')}")
-
-        return centroid, bounding_box, cap_color
+        bounding_box = tuple(best['bounding_box'])
+        # La clase 'class' del JSON es el índice numérico. El color real se mapea en main.py
+        cap_identifier = f"Clase {best.get('class', '?')}" # Mantenemos esto para depuración si es necesario
+        return centroid, bounding_box, cap_identifier
 
 
-    def resize_to_fit_screen(self, image, max_width=1920, max_height=1080):
-        height, width = image.shape[:2]
-        scale = min(max_width / width, max_height / height, 1.0)  # No agranda, solo reduce
-        new_width = int(width * scale)
-        new_height = int(height * scale)
-        return cv2.resize(image, (new_width, new_height), interpolation=cv2.INTER_AREA)
+    def draw_selected_on_image(self, base_image: cv2.typing.MatLike, selected_cap_data: Optional[Dict]) -> Optional[cv2.typing.MatLike]:
+        """
+        Dibuja el tapón seleccionado (bounding box y centroide) en una COPIA de la imagen base.
+        Si no hay tapón seleccionado, devuelve la imagen base sin modificar.
 
-    def draw_selected_on_image(self, image_path: str):
-        best = self.select_best_cap()
-        if best is None:
-            print("[INFO] No se encontró ningún tapón válido para dibujar.")
-            return
+        Args:
+            base_image: La imagen original (objeto NumPy de OpenCV) donde dibujar.
+            selected_cap_data: El diccionario de la detección del tapón seleccionado.
 
-        image = cv2.imread(image_path)
-        if image is None:
-            print(f"[ERROR] No se pudo cargar la imagen: {image_path}")
-            return
+        Returns:
+            Una nueva imagen con el tapón seleccionado dibujado, o la imagen original si no hay selección.
+        """
+        if base_image is None:
+            print("ERROR: draw_selected_on_image recibió una imagen base nula.")
+            return None
 
-        x1, y1, x2, y2 = best['bounding_box']
-        cx, cy = best['centroid']
-        image_copy = image.copy()
+        image_to_draw_on = base_image.copy() # Siempre trabajar sobre una copia
 
-        cv2.rectangle(image_copy, (x1, y1), (x2, y2), (0, 255, 0), 3)
-        cv2.circle(image_copy, (cx, cy), 5, (0, 0, 255), -1)
+        if selected_cap_data:
+            try:
+                x1, y1, x2, y2 = selected_cap_data['bounding_box']
+                cx, cy = selected_cap_data['centroid']
 
-        cap_color = best.get('color', f"Clase {best.get('class', '?')}")
-        label = f"Clase: {best.get('class', '?')} | Conf: {best.get('confidence', 0):.2f} | Color: {cap_color}"
+                # Dibujar el bounding box del tapón seleccionado (e.g., azul brillante)
+                cv2.rectangle(image_to_draw_on, (x1, y1), (x2, y2), (255, 128, 0), 2) # BGR, grosor 2
+                # Dibujar el centroide (e.g., punto rojo)
+                cv2.circle(image_to_draw_on, (cx, cy), 5, (0, 0, 255), -1) # BGR, círculo relleno
+            except KeyError as e:
+                print(f"ERROR: Faltan datos en selected_cap_data para dibujar: {e}")
+                return image_to_draw_on # Devuelve la copia sin dibujar si faltan datos
+        
+        return image_to_draw_on
 
-        cv2.putText(image_copy, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
-
-        # Redimensionar imagen para que quepa en pantalla
-        image_resized = self.resize_to_fit_screen(image_copy)
-
-        cv2.imshow("Tapón seleccionado", image_resized)
-        print("[INFO] Pulsa ENTER para cerrar la ventana.")
-        while True:
-            key = cv2.waitKey(0)
-            if key == 13:  # Enter
-                break
-        cv2.destroyAllWindows()
-
-
-#####################################################################################
-# EJEMPLO DE USO
-#####################################################################################
-if __name__ == "__main__":
-    print("Ejemplo de uso de CapDecisionMaker")
-    decision = CapDecisionMaker("capDetectionsFile.json", min_area=2000, min_confidence=0.9)
-    result = decision.get_best_cap_info()
-
-    if result:
-        centroid, bounding_box, cap_color = result
-        print(f"Tapón seleccionado en {centroid} | Bounding Box: {bounding_box} | Color: {cap_color}")
-        decision.draw_selected_on_image("tapones3.jpg")
-    else:
-        print("No se encontró ningún tapón válido.")
+    # La función resize_to_fit_screen y el ejemplo de uso en __main__ pueden eliminarse o adaptarse,
+    # ya que el dimensionamiento principal para la GUI lo hará Qt y el flujo es desde main.py
+    # def resize_to_fit_screen(...): #
+    # if __name__ == "__main__": #

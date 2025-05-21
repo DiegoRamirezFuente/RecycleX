@@ -1,62 +1,32 @@
 [
     {
         "bounding_box": [
-            124,
-            138,
-            209,
-            221
+            175,
+            226,
+            280,
+            335
         ],
         "centroid": [
-            166,
-            179
+            227,
+            280
         ],
-        "area": 7055,
-        "confidence": 0.9764,
-        "class": 1
+        "area": 11445,
+        "confidence": 0.8091,
+        "class": 5
     },
     {
         "bounding_box": [
-            137,
-            219,
-            222,
-            300
+            302,
+            190,
+            411,
+            297
         ],
         "centroid": [
-            179,
-            259
+            356,
+            243
         ],
-        "area": 6885,
-        "confidence": 0.9664,
-        "class": 0
-    },
-    {
-        "bounding_box": [
-            221,
-            155,
-            288,
-            220
-        ],
-        "centroid": [
-            254,
-            187
-        ],
-        "area": 4355,
-        "confidence": 0.9482,
-        "class": 4
-    },
-    {
-        "bounding_box": [
-            169,
-            43,
-            253,
-            129
-        ],
-        "centroid": [
-            211,
-            86
-        ],
-        "area": 7224,
-        "confidence": 0.6167,
-        "class": 3
+        "area": 11663,
+        "confidence": 0.8017,
+        "class": 5
     }
 ]
