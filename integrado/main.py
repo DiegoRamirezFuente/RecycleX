@@ -31,8 +31,9 @@ SELECTED_CAP_DISPLAY_PATH = "gui_selected_cap.jpg"
 # Posiciones del Robot (de tu último main.py)
 REST_POSITION_JOINTS = [1.4567713737487793, -1.6137963734068812, 0.03687411943544561,
                         -1.5324381862631817,  0.12954740226268768, -0.4755452314959925]
-IMAGE_CAPTURE_POSITION_JOINTS = [1.3806346654891968, -1.617410799066061, 1.3717930952655237,
-                                 -1.3240544509938736, -1.5211947599994105, -0.4361074606524866]
+IMAGE_CAPTURE_POSITION_JOINTS = [1.3783482313156128, -1.7762123546996058, 1.3978703657733362,
+                                 -1.1838005644134064, -1.522461239491598, -0.5920336882220667]
+
 DEPOSIT_POSITIONS = {
     "Amarillo": [-2.2998903433429163, -1.047537164097168, 0.8475335280047815, 
                  -1.355234370832779, -1.549577538167135, -0.12971574464906865],
@@ -162,9 +163,9 @@ class RobotWorker(QObject):
                     self.robot.move_to_pixel(px, py, speed=0.25, accel=0.35) #
 
                     if self.robot.descend_until_contact(): #
-                        # descend_with_force con duration=3.0 de tu último main.py
-                        self.robot.descend_with_force(duration=2.0, force=-500.0)
-                        self.update_gui_signal.emit({"status": "Contacto. Tapón sujeto."}) #
+                        self.update_gui_signal.emit({"status": "Contacto detectado. Ventosa activada."})
+                        self.robot.descend_with_force(duration=2.0, force=15.0)
+                        self.update_gui_signal.emit({"status": "Vacío generado. Tapón sujeto."})
                         self.robot.retract(dz=0.15) # dz=0.15 de tu último main.py
 
                         if cap_color_name in cap_counts: #

@@ -1,32 +1,17 @@
 [
     {
         "bounding_box": [
-            175,
-            226,
-            280,
-            335
+            239,
+            134,
+            332,
+            227
         ],
         "centroid": [
-            227,
-            280
+            285,
+            180
         ],
-        "area": 11445,
-        "confidence": 0.8091,
-        "class": 5
-    },
-    {
-        "bounding_box": [
-            302,
-            190,
-            411,
-            297
-        ],
-        "centroid": [
-            356,
-            243
-        ],
-        "area": 11663,
-        "confidence": 0.8017,
-        "class": 5
+        "area": 8649,
+        "confidence": 0.5927,
+        "class": 0
     }
 ]

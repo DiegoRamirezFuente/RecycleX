@@ -44,7 +44,7 @@ if __name__ == "__main__":
         move_joint(con_ctr, con_rcv, q, SPEED, ACCELERATION)
 
         # Tercera posición articular (posición cómoda)
-        comfortable_q = [1.3806346654891968, -1.617410799066061, 1.3717930952655237, -1.3240544509938736, -1.5211947599994105, -0.4361074606524866]
+        comfortable_q = [1.3783674240112305, -1.7762352428831996, 1.3978703657733362, -1.183793382053711, -1.5224693457232874, -0.5920613447772425]
         current_pose = move_joint(con_ctr, con_rcv, comfortable_q, 1.0, 1.4)
         if current_pose is None:
             raise Exception("No se pudo mover a la posición cómoda. Abortando.")

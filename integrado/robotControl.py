@@ -24,13 +24,13 @@ class RobotController:
 
         # Calibración píxeles→mundo
         default_calib = {
-            "coef_x": [-7.14671540350273e-05, -0.000397897100259422],
-            "intercept_x": 0.1977189940615601,
-            "coef_y": [-0.00039706857701473535, 6.979248057165074e-05],
-            "intercept_y": -0.2570262178800905,
-            "z_fija": 0.23495259079391306
+            "coef_x": [-1.2033468802924826e-05, -0.0004417452631404956],
+            "intercept_x": 0.21071822878150553,
+            "coef_y": [-1.2033468802924826e-05, -0.0004417452631404956],
+            "intercept_y": -0.20984631345180826,
+            "z_fija": 0.24130366699128894
         }
-        
+
         self.calibration = calibration or default_calib
 
         # Interfaces RTDE
@@ -80,8 +80,8 @@ class RobotController:
              -1.5324381862631817,  0.12954740226268768, -0.4755452314959925],
             [1.380723476409912, -1.6959606609740199, 0.17434245744814092,
              -1.6387573681273402, -1.5071643034564417, -0.43589860597719365],
-            [1.3806346654891968, -1.617410799066061, 1.3717930952655237,
-             -1.3240544509938736, -1.5211947599994105, -0.4361074606524866]
+            [1.3783674240112305, -1.7762352428831996, 1.3978703657733362,
+             -1.183793382053711, -1.5224693457232874, -0.5920613447772425]
         ]
         for q in q_list:
             self.move_joint(q, speed=1.0, accel=1.4)
@@ -105,21 +105,20 @@ class RobotController:
         """
         Desciende aplicando fuerza controlada con forceMode, luego activa la salida digital.
         """
-        task_frame = [0, 0, 0, 0, 0, 0]
-        selection_vector = [0, 0, -1, 0, 0, 0]  # solo fuerza Z
+        task_frame = self.con_recv.getActualTCPPose()
+        selection_vector = [0, 0, 1, 0, 0, 0]  # solo fuerza Z
         wrench = [0, 0, force, 0, 0, 0]  # fuerza hacia abajo
+        #print(force)
         force_type = 2  # tipo de fuerza
-        limits = [2, 2, 1.5, 1, 1, 1]  # límites de movimiento permitidos
-
+        limits = [0.1, 0.1, 0.05, 0.05, 0.05, 0.05]  # límites de movimiento permitidos
         cycles = int(duration * control_freq)
-        dt = 1.0 / control_freq
 
         for i in range(cycles):
             t_start = self.con_ctrl.initPeriod()
             self.con_ctrl.forceMode(task_frame, selection_vector, wrench, force_type, limits)
             self.con_ctrl.waitPeriod(t_start)
         self.con_ctrl.forceModeStop()
-        self.con_io.setStandardDigitalOut(self.digital_output_pin, True)
+        #self.con_io.setStandardDigitalOut(self.digital_output_pin, True)
         return True
 
 

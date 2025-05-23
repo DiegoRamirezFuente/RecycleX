@@ -50,14 +50,14 @@ class CapDecisionMaker:
             # Criterio principal: "cuadratura" del bounding box
             # Tapones más cuadrados suelen ser mejores detecciones frontales.
             score = self.compute_squareness(det['bounding_box'])
-
-            # Opcional: añadir otros factores al score, como confianza o área (con pesos)
-            # score += det['confidence'] * 0.2 # Darle un peso a la confianza
-            # score += (det['area'] / 10000) * 0.1 # Darle un peso al área (normalizada)
+            score += det['confidence'] * 0.2 # Darle un peso a la confianza
+            score += (det['area'] / 10000) * 0.1 # Darle un peso al área (normalizada)
 
             if score > best_score:
                 best_score = score
                 best_cap = det
+
+        print(best_score)
         return best_cap
 
 
