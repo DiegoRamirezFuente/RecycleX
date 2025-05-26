@@ -2,6 +2,8 @@ import rtde_control
 import rtde_receive
 import rtde_io
 import time
+import numpy as np
+import cv2
 
 class RobotController:
     """
@@ -12,28 +14,33 @@ class RobotController:
       - Descenso hasta contacto y control de IO
     """
 
-    def __init__(self,
-                 robot_ip: str,
+    def __init__(self, robot_ip: str,
                  digital_output_pin: int = 4,
-                 wait_time: float = 2.0,
-                 calibration: dict = None):
-        # Parámetros conexión e IO
+                 wait_time: float = 2.0):
         self.robot_ip = robot_ip
         self.digital_output_pin = digital_output_pin
         self.wait_time = wait_time
+        
+        # Hardcodear matriz intrínseca (K)
+        self.K = np.array([
+            [1.43141740e+03, 0.00000000e+00, 9.63097808e+02],
+            [0.00000000e+00, 1.43085086e+03, 5.27575982e+02],
+            [0.00000000e+00, 0.00000000e+00, 1.00000000e+00]
+        ])
 
-        # Calibración píxeles→mundo
-        default_calib = {
-            "coef_x": [-1.2033468802924826e-05, -0.0004417452631404956],
-            "intercept_x": 0.21071822878150553,
-            "coef_y": [-1.2033468802924826e-05, -0.0004417452631404956],
-            "intercept_y": -0.20984631345180826,
-            "z_fija": 0.24130366699128894
-        }
+        # Hardcodear coeficientes de distorsión
+        self.dist_coeffs = np.array([
+            6.14327887e-02, -2.41696976e-01, -3.53959131e-03, 1.14080494e-04, 1.09212227e-01
+        ])
 
-        self.calibration = calibration or default_calib
+        # Hardcodear matriz extrínseca cámara → TCP, última calibración que hiciste
+        self.T_cam2tcp = np.array([
+            [ 0.85011681, -0.45225934,  0.26974597, -0.31966518],
+            [ 0.41792422,  0.89109111,  0.17690673, -0.14078716],
+            [-0.32037595, -0.03765801,  0.94654166, -0.43525681],
+            [ 0.        ,  0.        ,  0.        ,  1.        ]
+        ])
 
-        # Interfaces RTDE
         self.con_ctrl = None
         self.con_recv = None
         self.con_io = None
@@ -53,13 +60,18 @@ class RobotController:
         if self.con_io and self.con_io.isConnected():
             self.con_io.disconnect()
 
-    def pixel_to_robot(self, px: float, py: float) -> list:
-        """Convierte (px,py) en píxeles a [X,Y,Z] en metros."""
-        cx, cy = self.calibration["coef_x"], self.calibration["coef_y"]
-        x = cx[0]*px + cx[1]*py + self.calibration["intercept_x"]
-        y = cy[0]*px + cy[1]*py + self.calibration["intercept_y"]
-        z = self.calibration["z_fija"]
-        return [x, y, z]
+    def pixel_to_robot(self, px: float, py: float, Z_cam: float = 0.24130366699128894) -> list:
+            """Convierte píxeles y profundidad Z_cam en coordenadas TCP 3D."""
+
+            pts = np.array([[[px, py]]], dtype=np.float32)
+            undistorted_pts = cv2.undistortPoints(pts, self.K, self.dist_coeffs, P=self.K)
+            x_ud, y_ud = undistorted_pts[0, 0]
+
+            XYZ_cam = Z_cam * np.array([x_ud, y_ud, 1.0])
+            XYZ_cam_hom = np.append(XYZ_cam, 1.0)
+
+            XYZ_tcp_hom = self.T_cam2tcp @ XYZ_cam_hom
+            return XYZ_tcp_hom[:3].tolist()
 
     def move_joint(self, joints: list, speed: float, accel: float) -> list:
         """Movimiento en espacio articular (moveJ)."""
@@ -88,8 +100,10 @@ class RobotController:
 
     def move_to_pixel(self, px: float, py: float, speed: float=0.2, accel: float=0.3) -> list:
         """Convierte píxeles y mueve linealmente al objetivo."""
-        xyz = self.pixel_to_robot(px, py)
-        ori = self.con_recv.getActualTCPPose()[3:6]
+        tcp_pose = self.con_recv.getActualTCPPose()  # [x,y,z,rx,ry,rz]
+        Z_cam = tcp_pose[2]
+        xyz = self.pixel_to_robot(px, py, Z_cam)
+        ori = tcp_pose[3:6]
         target = xyz + ori
         return self.move_linear(target, speed, accel)
 
