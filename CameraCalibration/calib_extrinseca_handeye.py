@@ -56,7 +56,7 @@ for i, fname in enumerate(images):
 R_cam2grip, t_cam2grip = cv2.calibrateHandEye(
     R_gripper2base, t_gripper2base,
     R_target2cam, t_target2cam,
-    method=cv2.CALIB_HAND_EYE_TSAI  # o cv2.CALIB_HAND_EYE_DANIILIDIS
+    method=cv2.CALIB_HAND_EYE_PARK
 )
 
 T_cam2grip = np.eye(4)
