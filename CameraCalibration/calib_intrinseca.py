@@ -5,7 +5,7 @@ import glob
 import os
 import json
 
-CHECKERBOARD = (7, 7)
+CHECKERBOARD = (6, 7)
 SQUARE_SIZE = 0.025
 images_path = 'calib_images/calib_*.jpg'
 criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)

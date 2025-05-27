@@ -18,7 +18,7 @@ class CamaraWidget(QWidget):
         self.setLayout(layout)
 
         # Cámara
-        self.cap = cv2.VideoCapture(0)
+        self.cap = cv2.VideoCapture(2)
         if not self.cap.isOpened():
             raise Exception("No se pudo abrir la cámara.")
 

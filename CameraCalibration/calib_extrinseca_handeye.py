@@ -5,7 +5,7 @@ import json
 import glob
 from scipy.spatial.transform import Rotation as R
 
-CHECKERBOARD = (7, 7)
+CHECKERBOARD = (6, 7)
 SQUARE_SIZE = 0.025
 images_path = 'output/sin_distorsion/calib_*.jpg'
 
