@@ -8,7 +8,7 @@ import sys
 
 # Configuración
 output_dir = "calib_images"
-chessboard_size = (6, 7)
+chessboard_size = (7, 7)
 
 class CameraCapture(QWidget):
     def __init__(self):

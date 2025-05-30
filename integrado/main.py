@@ -2,8 +2,10 @@
 import sys
 import time
 import os
+import json
 import math
-import cv2 
+import cv2
+import numpy as np
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QThread, pyqtSignal, QObject
 
@@ -57,6 +59,16 @@ COLOR_TO_BOX_MAP = {
 # Contadores de tapones
 cap_counts = {color_name: 0 for color_name in DEPOSIT_POSITIONS.keys()}
 
+CALIBRATION_FILE = "intrinsic_calibration_data.json"
+
+if os.path.exists(CALIBRATION_FILE):
+    with open(CALIBRATION_FILE, 'r') as f:
+        data = json.load(f)
+    camera_matrix = np.array(data["camera_matrix"])
+    dist_coeffs = np.array(data["dist_coeffs"])
+else:
+    camera_matrix, dist_coeffs = None, None
+    print(f"ADVERTENCIA: Archivo de calibración '{CALIBRATION_FILE}' no encontrado. No se desdistorsionarán imágenes.")
 
 class RobotWorker(QObject):
     update_gui_signal = pyqtSignal(dict)
@@ -114,6 +126,13 @@ class RobotWorker(QObject):
 
                 # Cargar la imagen capturada con OpenCV para poder pasarla a decisionMaker
                 captured_cv_image = cv2.imread(IMAGE_PATH)
+
+                if camera_matrix is not None and dist_coeffs is not None:
+                    captured_cv_image = cv2.undistort(captured_cv_image, camera_matrix, dist_coeffs)
+                    cv2.imwrite(IMAGE_PATH, captured_cv_image)  # Sobrescribimos la imagen ya desdistorsionada
+                else:
+                    print("AVISO: No se pudo desdistorsionar la imagen por falta de parámetros de calibración.")
+
                 if captured_cv_image is None:
                     self.update_gui_signal.emit({"status": "Error crítico: No se pudo leer la imagen capturada del disco."})
                     continue
