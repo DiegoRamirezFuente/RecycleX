@@ -24,11 +24,11 @@ class RobotController:
 
         # Calibración píxeles→mundo
         default_calib = {
-            "coef_x": [-1.2033468802924826e-05, -0.0004417452631404956],
-            "intercept_x": 0.21071822878150553,
-            "coef_y": [-1.2033468802924826e-05, -0.0004417452631404956],
-            "intercept_y": -0.20984631345180826,
-            "z_fija": 0.24130366699128894
+            "coef_x": [-1.1525085876378981e-05, -0.00043730097542978437],
+            "intercept_x": 0.20691818075849944,
+            "coef_y": [-0.0004386602342143235, 5.20863630397258e-06],
+            "intercept_y": -0.18450060295383133,
+            "z_fija": 0.24130077681581635
         }
 
         self.calibration = calibration or default_calib
@@ -108,7 +108,6 @@ class RobotController:
         task_frame = self.con_recv.getActualTCPPose()
         selection_vector = [0, 0, 1, 0, 0, 0]  # solo fuerza Z
         wrench = [0, 0, force, 0, 0, 0]  # fuerza hacia abajo
-        #print(force)
         force_type = 2  # tipo de fuerza
         limits = [0.1, 0.1, 0.05, 0.05, 0.05, 0.05]  # límites de movimiento permitidos
         cycles = int(duration * control_freq)
@@ -125,7 +124,7 @@ class RobotController:
     def retract(self, dz: float=0.1, speed: float=0.1, accel: float=0.5):
         """Eleva el TCP en dz metros linealmente."""
         pose = self.con_recv.getActualTCPPose()
-        pose[2] = 0.23495259079391306
+        pose[2] = 0.24130077681581635
         self.move_linear(pose, speed, accel)
 
     def lateral_rotation(self, delta: float=3.14159, speed: float=1.0, accel: float=1.4):
