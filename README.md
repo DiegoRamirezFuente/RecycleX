@@ -175,8 +175,3 @@ Incluye:
 - Vídeo divulgativo y vídeo técnico (ver en el repositorio)
 
 ---
-
-## 📜 Licencia
-
-Este proyecto fue desarrollado con fines académicos y puede reutilizarse con atribución para fines de investigación o docencia.  
-Licencia Creative Commons BY-NC-SA 4.0.
