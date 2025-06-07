@@ -71,9 +71,10 @@ FinalCode/
 - Verifica si está en el rango manipulable del UR3.
 
 ### 🤖 Control del UR3
-![UR3 en acción](assets/ur3_control.png)
-- Control por movimientos `MoveL`, `MoveJ` y `MoveS`.
 - Comunicación mediante protocolo RTDE o TCP/IP.
+- Control por movimientos `MoveL` y `MoveJ`.
+- Movimiento hasta contacto mediante `MoveUntilContact`.
+- Control de fuerza mediante `forceMode`.
 
 ### 🧲 Efector Final (Ventosa)
 ![Ventosa](assets/gripper_tool.png)
