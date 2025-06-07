@@ -148,13 +148,16 @@ Esto abrirá la interfaz gráfica y comenzará el proceso automatizado de detecc
 
 Este proyecto fue desarrollado como parte del *Laboratorio de Robótica y Automática*.
 
-| Nombre               | Rol                                              |
-|----------------------|--------------------------------------------------|
-| Iñaki Dellibarda     | Algoritmo de decisión y planificación (WP400/600)|
-| Diego Ramírez        | Visión por computador e integración (WP300/700)  |
-| Pablo Hita           | Control del robot UR3 y gestión (WP500/100)      |
-| Carlos Mesa          | Herramienta del UR y validación (WP200/800)      |
+## 👥 Equipo de Desarrollo
 
+Este proyecto fue desarrollado como parte de la asignatura *Laboratorio de Robótica y Automática* del Máster Universitario en Automática y Robótica de la *Universidad Politécnica de Madrid*.
+
+| Nombre            |
+|-------------------|
+| Iñaki Dellibarda  |
+| Pablo Hita        |
+| Carlos Mesa       |
+| Diego Ramírez     |
 ---
 
 ## 🎥 Vídeos del Proyecto
