@@ -11,7 +11,7 @@ Este sistema integra visión artificial, inteligencia artificial, algoritmos de 
 
 El reciclaje manual de tapones es ineficiente, especialmente cuando deben clasificarse por color. Este proyecto propone una solución automatizada que:
 
-- Detecta tapones mediante visión artificial (YOLOv5).
+- Detecta tapones mediante visión artificial (YOLOv8).
 - Clasifica por color usando lógica de decisión.
 - Controla un brazo robótico UR3 para manipularlos.
 - Deposita cada tapón en el contenedor correspondiente.
@@ -45,7 +45,7 @@ RecycleX/
 ├── FinalCode/                          # Código principal del sistema
 │   ├── main.py                         # Script principal
 │   ├── cameraControl.py                # Control y adquisición de imagen
-│   ├── capDetection.py                 # Detección con YOLOv5
+│   ├── capDetection.py                 # Detección con YOLOv8
 │   ├── decisionMaker.py                # Selección del tapón óptimo
 │   ├── robotControl.py                 # Control del UR3
 │   ├── gui.py                          # Interfaz gráfica (PyQt)
@@ -72,7 +72,7 @@ RecycleX/
 
 ## 📸 Módulos Principales
 
-### 🔍 Detección con YOLOv5
+### 🔍 Detección con YOLOv8
 ![Detección YOLO](assets/yolo_detection.png)
 - Entrenado con imágenes de tapones.
 - Precisión y rapidez para uso en tiempo real.
@@ -103,7 +103,7 @@ RecycleX/
 ## 🛠️ Requisitos
 
 - Python 3.10
-- YOLOv5 (PyTorch)
+- YOLOv8 (PyTorch)
 - OpenCV, NumPy, PyQt5
 - URControl vía RTDE / TCP/IP
 - Cámara HD (ej. Intel RealSense)
