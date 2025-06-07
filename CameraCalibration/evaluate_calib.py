@@ -19,6 +19,30 @@ def analyze_calibration(calibration_data, image_width=640, image_height=480):
     errors_y_m = np.abs(y_tcp_m - predicted_y_m)
     total_error_m = np.sqrt(errors_x_m**2 + errors_y_m**2)
 
+    # ---
+    ## Análisis de Errores
+
+    print("--- Estadísticas del Error Total ---")
+    print(f"Media del error: {np.mean(total_error_m):.6f} m")
+    print(f"Mediana del error: {np.median(total_error_m):.6f} m")
+    print(f"Desviación estándar del error: {np.std(total_error_m):.6f} m")
+    print(f"Error mínimo: {np.min(total_error_m):.6f} m")
+    print(f"Error máximo: {np.max(total_error_m):.6f} m")
+    print("-----------------------------------")
+
+    # Histograma del Error Total
+    plt.figure(figsize=(10, 6))
+    plt.hist(total_error_m, bins=20, edgecolor='black', alpha=0.7)
+    plt.title('Distribución del Error Total de Calibración')
+    plt.xlabel('Error Total (m)')
+    plt.ylabel('Frecuencia')
+    plt.grid(axis='y', alpha=0.75)
+    plt.tight_layout()
+    plt.show()
+
+    # ---
+    ## Mapa de Calor de Errores
+
     # Cuadrícula para toda la imagen 640x480
     grid_u, grid_v = np.meshgrid(np.arange(image_width), np.arange(image_height))
 
@@ -28,14 +52,22 @@ def analyze_calibration(calibration_data, image_width=640, image_height=480):
     grid_errors = griddata(points, total_error_m, (grid_u, grid_v), method='cubic')
 
     # Rellenar con vecino más cercano fuera del área convexa para evitar huecos
-    mask_nan = np.isnan(grid_errors)
-    grid_errors[mask_nan] = griddata(points, total_error_m, (grid_u, grid_v), method='nearest')[mask_nan]
+    # Primero, se interpola con 'linear' para cubrir áreas más amplias antes de 'nearest'
+    # Esto puede dar una mejor aproximación que ir directo a 'nearest' si hay muchos NaNs
+    grid_errors_linear = griddata(points, total_error_m, (grid_u, grid_v), method='linear')
+    mask_nan_linear = np.isnan(grid_errors) # Usa la máscara de la interpolación cúbica
+    grid_errors[mask_nan_linear] = grid_errors_linear[mask_nan_linear] # Rellena con linear
 
-    plt.figure(figsize=(8, 6))
+    # Rellena cualquier NaN restante con 'nearest'
+    mask_nan_final = np.isnan(grid_errors)
+    if np.any(mask_nan_final): # Solo si quedan NaNs
+        grid_errors[mask_nan_final] = griddata(points, total_error_m, (grid_u, grid_v), method='nearest')[mask_nan_final]
+
+    plt.figure(figsize=(10, 8)) # Aumenta un poco el tamaño para mejor visualización
     plt.imshow(grid_errors, cmap='hot_r', origin='upper', extent=[0, image_width, image_height, 0])
     plt.colorbar(label='Error Total (m)')
-    plt.scatter(u_px, v_px, c='blue', marker='o', s=50, label='Puntos de Calibración')
-    plt.title('Mapa de Calor de Errores de Calibración (640×480)')
+    plt.scatter(u_px, v_px, c='blue', marker='o', s=50, edgecolors='white', linewidth=1, label='Puntos de Calibración') # Añade borde blanco
+    plt.title('Mapa de Calor de Errores de Calibración (640x480)')
     plt.xlabel('U (píxeles)')
     plt.ylabel('V (píxeles)')
     plt.legend()
@@ -43,10 +75,13 @@ def analyze_calibration(calibration_data, image_width=640, image_height=480):
     plt.tight_layout()
     plt.show()
 
+    # ---
+    ## Visualización de Puntos y Regresiones
+
     # Puntos de calibración con eje Y invertido para coordenadas de imagen
     plt.figure(figsize=(8, 6))
     plt.scatter(u_px, v_px, c='red', marker='x', s=100, label='Puntos de Calibración')
-    plt.gca().invert_yaxis()
+    plt.gca().invert_yaxis() # Invierte el eje Y para que (0,0) sea la esquina superior izquierda
     plt.title('Puntos de Calibración en Coordenadas de Imagen (píxeles)')
     plt.xlabel('U (píxeles)')
     plt.ylabel('V (píxeles)')
@@ -58,33 +93,30 @@ def analyze_calibration(calibration_data, image_width=640, image_height=480):
     # Gráficas de regresión para X e Y
     fig, axes = plt.subplots(1, 2, figsize=(15, 6))
 
-    sorted_indices = np.argsort(u_px)
-    x_tcp_m_sorted = x_tcp_m[sorted_indices]
-    predicted_x_m_sorted = predicted_x_m[sorted_indices]
-
-    axes[0].scatter(x_tcp_m_sorted, predicted_x_m_sorted, color='blue', label='Real vs Predicho X')
+    # Regresión para X
+    # No es necesario ordenar por u_px o v_px para la gráfica de regresión real vs. predicho
+    axes[0].scatter(x_tcp_m, predicted_x_m, color='blue', label='Real vs Predicho X', alpha=0.7)
     min_x = min(np.min(x_tcp_m), np.min(predicted_x_m))
     max_x = max(np.max(x_tcp_m), np.max(predicted_x_m))
-    axes[0].plot([min_x, max_x], [min_x, max_x], 'r--', label='Ajuste Ideal')
+    axes[0].plot([min_x, max_x], [min_x, max_x], 'r--', label='Ajuste Ideal (y=x)')
     axes[0].set_title('Regresión para Coordenada X')
     axes[0].set_xlabel('X Real (m)')
     axes[0].set_ylabel('X Predicha (m)')
     axes[0].legend()
     axes[0].grid(True)
+    axes[0].set_aspect('equal', adjustable='box') # Hace que los ejes tengan la misma escala
 
-    sorted_indices = np.argsort(v_px)
-    y_tcp_m_sorted = y_tcp_m[sorted_indices]
-    predicted_y_m_sorted = predicted_y_m[sorted_indices]
-
-    axes[1].scatter(y_tcp_m_sorted, predicted_y_m_sorted, color='green', label='Real vs Predicho Y')
+    # Regresión para Y
+    axes[1].scatter(y_tcp_m, predicted_y_m, color='green', label='Real vs Predicho Y', alpha=0.7)
     min_y = min(np.min(y_tcp_m), np.min(predicted_y_m))
     max_y = max(np.max(y_tcp_m), np.max(predicted_y_m))
-    axes[1].plot([min_y, max_y], [min_y, max_y], 'r--', label='Ajuste Ideal')
+    axes[1].plot([min_y, max_y], [min_y, max_y], 'r--', label='Ajuste Ideal (y=x)')
     axes[1].set_title('Regresión para Coordenada Y')
     axes[1].set_xlabel('Y Real (m)')
     axes[1].set_ylabel('Y Predicha (m)')
     axes[1].legend()
     axes[1].grid(True)
+    axes[1].set_aspect('equal', adjustable='box') # Hace que los ejes tengan la misma escala
 
     plt.tight_layout()
     plt.show()
