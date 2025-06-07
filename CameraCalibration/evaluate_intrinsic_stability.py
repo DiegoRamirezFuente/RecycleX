@@ -1,9 +1,8 @@
-
 import cv2
 import numpy as np
 import glob
 import matplotlib.pyplot as plt
-import os
+from scipy.interpolate import griddata
 
 CHECKERBOARD = (10, 7)
 SQUARE_SIZE = 0.025
@@ -20,7 +19,6 @@ objp *= SQUARE_SIZE
 images = sorted(glob.glob(images_path))
 assert len(images) >= 5, "Se necesitan al menos 5 imágenes."
 
-# Métricas
 num_imgs_list = []
 reproj_errors = []
 fxs, fys = [], []
@@ -28,7 +26,9 @@ cxs, cys = [], []
 k1s, k2s, k3s = [], [], []
 p1s, p2s = [], []
 fx_mm, fy_mm = [], []
+
 all_corners = []
+all_errors = []
 
 for n in range(5, len(images) + 1):
     sub_imgs = images[:n]
@@ -45,7 +45,7 @@ for n in range(5, len(images) + 1):
         corners2 = cv2.cornerSubPix(gray, corners, (11, 11), (-1, -1), criteria)
         objpoints.append(objp)
         imgpoints.append(corners2)
-        if n == len(images):  # solo en el pase final guardamos para el gráfico de cobertura
+        if n == len(images):
             all_corners.extend([pt.ravel() for pt in corners2])
 
     if len(objpoints) < 3:
@@ -56,8 +56,10 @@ for n in range(5, len(images) + 1):
     total_error = 0
     for i in range(len(objpoints)):
         imgpoints2, _ = cv2.projectPoints(objpoints[i], rvecs[i], tvecs[i], K, dist)
-        error = cv2.norm(imgpoints[i], imgpoints2, cv2.NORM_L2) / len(imgpoints2)
-        total_error += error
+        error_per_point = np.linalg.norm(imgpoints[i].reshape(-1, 2) - imgpoints2.reshape(-1, 2), axis=1)
+        total_error += np.mean(error_per_point)
+        if n == len(images):
+            all_errors.extend(error_per_point.tolist())
 
     error_mean = total_error / len(objpoints)
     reproj_errors.append(error_mean)
@@ -80,7 +82,7 @@ for n in range(5, len(images) + 1):
     fx_mm.append(fx * SENSOR_WIDTH_MM / img_shape[0])
     fy_mm.append(fy * SENSOR_HEIGHT_MM / img_shape[1])
 
-# === Graficar métricas (sin la distribución) ===
+# Gráficos métricas
 fig, axs = plt.subplots(3, 2, figsize=(16, 12))
 fig.suptitle("Evaluación de calibración intrínseca", fontsize=16)
 
@@ -90,19 +92,19 @@ axs[0, 0].grid(True)
 
 axs[0, 1].plot(num_imgs_list, fxs, marker='o', label='fx (px)')
 axs[0, 1].plot(num_imgs_list, fys, marker='o', label='fy (px)')
-axs[0, 1].set_title("Focal Lengths (px)")
+axs[0, 1].set_title("Longitud focal (px)")
 axs[0, 1].legend()
 axs[0, 1].grid(True)
 
 axs[1, 0].plot(num_imgs_list, fx_mm, marker='o', label='fx (mm)')
 axs[1, 0].plot(num_imgs_list, fy_mm, marker='o', label='fy (mm)')
-axs[1, 0].set_title("Focal Lengths (mm)")
+axs[1, 0].set_title("Longitud focal (mm)")
 axs[1, 0].legend()
 axs[1, 0].grid(True)
 
 axs[1, 1].plot(num_imgs_list, cxs, marker='o', label='cx')
 axs[1, 1].plot(num_imgs_list, cys, marker='o', label='cy')
-axs[1, 1].set_title("Puntos principales (px)")
+axs[1, 1].set_title("Punto principal (px)")
 axs[1, 1].legend()
 axs[1, 1].grid(True)
 
@@ -122,8 +124,7 @@ axs[2, 1].grid(True)
 plt.tight_layout(rect=[0, 0, 1, 0.96])
 plt.show()
 
-
-# === Nueva figura para distribución de puntos ===
+# Distribución de puntos
 if all_corners:
     corners_array = np.array(all_corners)
     plt.figure(figsize=(8, 6))
@@ -133,4 +134,24 @@ if all_corners:
     plt.xlabel("X (px)")
     plt.ylabel("Y (px)")
     plt.grid(True)
+    plt.show()
+
+    # Mapa de calor con puntos de calibración
+    errors_array = np.array(all_errors)
+    grid_x, grid_y = np.meshgrid(np.arange(640), np.arange(480))
+
+    grid_errors = griddata(corners_array, errors_array, (grid_x, grid_y), method='cubic')
+    mask_nan = np.isnan(grid_errors)
+    grid_errors[mask_nan] = griddata(corners_array, errors_array, (grid_x, grid_y), method='nearest')[mask_nan]
+
+    plt.figure(figsize=(8, 6))
+    plt.imshow(grid_errors, cmap='hot_r', origin='upper', extent=[0, 640, 480, 0])
+    plt.colorbar(label='Error de reproyección (px)')
+    plt.scatter(corners_array[:, 0], corners_array[:, 1], c='white', s=10, label='Puntos de calibración')
+    plt.title("Mapa de calor de error de reproyección intrínseca")
+    plt.xlabel("X (px)")
+    plt.ylabel("Y (px)")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
     plt.show()
