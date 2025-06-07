@@ -20,7 +20,7 @@ El reciclaje manual de tapones es ineficiente, especialmente cuando deben clasif
 
 ---
 
-## 🖼️ Visión General del Sistema
+## 🧩 Arquitectura por Módulos
 
 ![Diagrama general del sistema](assets/overview.png)
 
@@ -28,8 +28,8 @@ El reciclaje manual de tapones es ineficiente, especialmente cuando deben clasif
 
 ## ⚙️ Características Principales
 
-- ✅ Detección de tapones con **YOLOv5**.
-- 🎨 Clasificación por color con lógica de decisión basada en área.
+- 🎨 Detección de tapones y clasificación por color con **YOLOv8**.
+- ✅ Lógica de decisión basada en área, confianza de detección y cuadratez del bounding box.
 - 🤖 Control de un robot **UR3** vía RTDE o TCP/IP.
 - 🧲 Herramienta de agarre por **ventosa**.
 - 🖥️ GUI en **PyQt5** para visualización y control.
@@ -40,20 +40,32 @@ El reciclaje manual de tapones es ineficiente, especialmente cuando deben clasif
 ## 📂 Estructura del Proyecto
 
 ```bash
-FinalCode/
+RecycleX/
 │
-├── main.py                       # Script principal
-├── cameraControl.py              # Control y adquisición de imagen
-├── capDetection.py              # Detección con YOLOv5
-├── decisionMaker.py             # Selección del tapón óptimo
-├── robotControl.py              # Control del UR3
-├── gui.py                        # Interfaz gráfica (PyQt)
-├── intrinsic_calibration_data.json  # Calibración de cámara
-├── capDetectionsFile.json       # Resultados de detección
-├── resources/                   # Recursos gráficos (GUI)
-├── train3/                      # Modelo YOLO entrenado
-├── assets/                      # Imágenes para documentación
-└── requirements.txt             # Librerías necesarias
+├── FinalCode/                          # Código principal del sistema
+│   ├── main.py                         # Script principal
+│   ├── cameraControl.py                # Control y adquisición de imagen
+│   ├── capDetection.py                 # Detección con YOLOv5
+│   ├── decisionMaker.py                # Selección del tapón óptimo
+│   ├── robotControl.py                 # Control del UR3
+│   ├── gui.py                          # Interfaz gráfica (PyQt)
+│   ├── intrinsic_calibration_data.json # Calibración de cámara (copia)
+│   ├── capDetectionsFile.json          # Resultados de detección
+│   ├── resources/                      # Recursos gráficos para GUI
+│   ├── train3/                         # Modelo YOLO entrenado
+│   ├── assets/                         # Imágenes para documentación (README)
+│   └── requirements.txt                # Librerías necesarias
+│
+├── CameraCalibration/                  # Scripts y datos para calibración
+│   ├── 1_calibrate_intrinsics.py       # Calibración intrínseca de cámara
+│   ├── calibracion_manual_yolo.py      # Calibración manual para YOLO
+│   ├── calib_manual_hsv.py             # Calibración de color manual (HSV)
+│   ├── evaluate_calib.py               # Evaluación global de calibración
+│   ├── evaluate_intrinsic_stability.py # Prueba de estabilidad de la calibración
+│   ├── calibracion_ur3.json            # Calibración extrínseca UR3-cámara
+│   ├── intrinsic_calibration_data.json # Archivo de parámetros intrínsecos
+│   ├── calib_images/                   # Imágenes usadas para calibrar
+│   └── output/                         # Resultados y visualizaciones de calibración
 ```
 
 ---
@@ -100,10 +112,10 @@ FinalCode/
 
 ## 🚀 Instalación
 
-1. Clona o descomprime el proyecto:
+1. Clona el repositorio:
    ```bash
-   unzip FinalCode.zip
-   cd FinalCode
+   git clone https://github.com/DiegoRamirezFuente/RecycleX.git
+   cd RecycleX/FinalCode
    ```
 
 2. Instala las dependencias:
@@ -120,21 +132,6 @@ Para lanzar la aplicación completa:
 python3 main.py
 ```
 Esto abrirá la interfaz gráfica y comenzará el proceso automatizado de detección, clasificación y depósito.
-
----
-
-## 🧩 Arquitectura por Módulos
-
-![Arquitectura modular](assets/architecture.png)
-
-Los módulos se desarrollaron según los *Work Packages (WP)* del proyecto académico:
-
-- WP300 – Visión por computador
-- WP400 – Algoritmo de decisión
-- WP500 – Control del UR3
-- WP600 – Planificación de movimientos
-- WP700 – Integración
-- WP800 – Validación
 
 ---
 
@@ -160,19 +157,15 @@ Este proyecto fue desarrollado como parte del *Laboratorio de Robótica y Autom�
 
 ---
 
-## 📦 Repositorio
+## 🎥 Vídeos del Proyecto
 
-Repositorio oficial del proyecto:
-👉 [https://github.com/DiegoRamirezFuente/RecycleX.git](https://github.com/DiegoRamirezFuente/RecycleX.git)
+- 📽️ **Vídeo técnico**  
+  Explica la arquitectura del sistema, calibración de cámara y robot, integración de módulos y funcionamiento interno del sistema completo.  
+  👉 [Ver vídeo técnico en YouTube](https://www.youtube.com/watch?v=DyVcX3Iqm3Q)
 
----
-
-## 🧪 Validación Final
-
-Incluye:
-
-- Pruebas funcionales en laboratorio
-- Documentación técnica
-- Vídeo divulgativo y vídeo técnico (ver en el repositorio)
+- 🌟 **Vídeo promocional y de demostración**  
+  Muestra el sistema en funcionamiento clasificando tapones, con énfasis en su utilidad práctica, impacto ecológico y potencial de automatización.  
+  👉 [Ver vídeo demostrativo en YouTube](https://www.youtube.com/watch?v=7zEMmb2n7-M)
 
 ---
+
