@@ -115,7 +115,6 @@ RecycleX/
 1. Clona el repositorio:
    ```bash
    git clone https://github.com/DiegoRamirezFuente/RecycleX.git
-   cd RecycleX/FinalCode
    ```
 
 2. Instala las dependencias:
@@ -129,6 +128,7 @@ RecycleX/
 
 Para lanzar la aplicación completa:
 ```bash
+cd RecycleX/FinalCode
 python3 main.py
 ```
 Esto abrirá la interfaz gráfica y comenzará el proceso automatizado de detección, clasificación y depósito.
@@ -137,8 +137,8 @@ Esto abrirá la interfaz gráfica y comenzará el proceso automatizado de detecc
 
 ## 📈 Resultados Esperados
 
-- ✔️ Precisión de detección > 90%
-- ⏱️ Tiempo de ciclo por tapón < 5 s
+- ✔️ Precisión de agarre > 90%
+- ⏱️ Tiempo de ciclo por tapón < 12 s
 - 🔁 Procesamiento iterativo continuo
 - 🧩 Robustez ante variaciones de color/forma
 
