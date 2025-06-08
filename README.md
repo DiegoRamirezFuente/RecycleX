@@ -162,7 +162,7 @@ Este proyecto fue desarrollado como parte de la asignatura *Laboratorio de Robó
 
 - 📽️ **Vídeo técnico**  
   Explica la arquitectura del sistema, calibración de cámara y robot, integración de módulos y funcionamiento interno del sistema completo.  
-  👉 [Ver vídeo técnico en YouTube](https://www.youtube.com/watch?v=DyVcX3Iqm3Q)
+  👉 [Ver vídeo técnico en YouTube](https://www.youtube.com/watch?v=Oh661WRXyLc)
 
 - 🌟 **Vídeo promocional y de demostración**  
   Muestra el sistema en funcionamiento clasificando tapones, con énfasis en su utilidad práctica, impacto ecológico y potencial de automatización.  
