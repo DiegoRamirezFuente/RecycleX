@@ -1,9 +1,11 @@
 
-# ♻️ Recyclex: Clasificación Robótica de Tapones por Color
+# ♻️ RecycleX: Clasificación Robótica de Tapones por Color
 
-**Recyclex** es un sistema robótico inteligente desarrollado como parte del *Máster Universitario en Automática y Robótica*, cuyo objetivo es automatizar la clasificación de tapones plásticos por color para su reciclaje y reutilización como filamento en impresión 3D.  
+**RecycleX** es un sistema robótico inteligente desarrollado como parte del *Máster Universitario en Automática y Robótica*, cuyo objetivo es automatizar la clasificación de tapones plásticos por color para su reciclaje y reutilización como filamento en impresión 3D.  
 
 Este sistema integra visión artificial, inteligencia artificial, algoritmos de decisión y control robótico mediante un robot colaborativo UR3.
+
+(assets/RecycleX.png)
 
 ---
 
@@ -16,7 +18,7 @@ El reciclaje manual de tapones es ineficiente, especialmente cuando deben clasif
 - Controla un brazo robótico UR3 para manipularlos.
 - Deposita cada tapón en el contenedor correspondiente.
 
-> 🌱 Recyclex contribuye a una economía circular y sostenible mediante la automatización del proceso de reciclaje.
+> 🌱 RecycleX contribuye a una economía circular y sostenible mediante la automatización del proceso de reciclaje.
 
 ---
 
