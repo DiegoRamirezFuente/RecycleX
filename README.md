@@ -166,7 +166,7 @@ Este proyecto fue desarrollado como parte de la asignatura *Laboratorio de Robó
 
 - 🌟 **Vídeo promocional y de demostración**  
   Muestra el sistema en funcionamiento clasificando tapones, con énfasis en su utilidad práctica, impacto ecológico y potencial de automatización.  
-  👉 [Ver vídeo demostrativo en YouTube](https://www.youtube.com/watch?v=7zEMmb2n7-M)
+  👉 [Ver vídeo demostrativo en YouTube](https://www.youtube.com/watch?v=3DejUVXnluY)
 
 ---
 
