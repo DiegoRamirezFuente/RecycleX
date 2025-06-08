@@ -150,12 +150,12 @@ Esto abrirá la interfaz gráfica y comenzará el proceso automatizado de detecc
 
 Este proyecto fue desarrollado como parte de la asignatura *Laboratorio de Robótica y Automática* del Máster Universitario en Automática y Robótica de la *Universidad Politécnica de Madrid*.
 
-| Nombre            |
-|-------------------|
-| Iñaki Dellibarda  |
-| Pablo Hita        |
-| Carlos Mesa       |
-| Diego Ramírez     |
+| Integrantes             |
+|-------------------------|
+| Iñaki Dellibarda Varela |
+| Pablo Hita Pérez        |
+| Carlos Mesa Sierra      |
+| Diego Ramírez Fuente    |
 ---
 
 ## 🎥 Vídeos del Proyecto
