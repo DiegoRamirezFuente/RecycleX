@@ -5,7 +5,7 @@
 
 Este sistema integra visión artificial, inteligencia artificial, algoritmos de decisión y control robótico mediante un robot colaborativo UR3.
 
-(assets/RecycleX.png)
+![RecycleX](assets/RecycleX.png)
 
 ---
 
