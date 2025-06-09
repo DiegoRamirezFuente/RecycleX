@@ -13,10 +13,11 @@ Este sistema integra visión artificial, inteligencia artificial, algoritmos de 
 
 El reciclaje manual de tapones es ineficiente, especialmente cuando deben clasificarse por color. Este proyecto propone una solución automatizada que:
 
-- Detecta tapones mediante visión artificial (YOLOv8).
-- Clasifica por color usando lógica de decisión.
+- Detecta tapones y clasifica por color mediante visión artificial (YOLOv8).
+- Escoge el más accesible usando lógica de decisión.
 - Controla un brazo robótico UR3 para manipularlos.
 - Deposita cada tapón en el contenedor correspondiente.
+- Permite supervisar el proceso a través de una interfaz de usuario.
 
 > 🌱 RecycleX contribuye a una economía circular y sostenible mediante la automatización del proceso de reciclaje.
 
@@ -68,6 +69,8 @@ RecycleX/
 │   ├── intrinsic_calibration_data.json # Archivo de parámetros intrínsecos
 │   ├── calib_images/                   # Imágenes usadas para calibrar
 │   └── output/                         # Resultados y visualizaciones de calibración
+├── auxiliar.py                         # Script de funciones auxiliares útiles para el control del UR3
+├── cam.py                              # Script para el correcto posicionamiento de la cámara al comienzo
 ```
 
 ---
@@ -80,9 +83,7 @@ RecycleX/
 - Precisión y rapidez para uso en tiempo real.
 
 ### 🧠 Algoritmo de Decisión
-![Algoritmo decisión](assets/decision_logic.png)
-- Elige el tapón más accesible según área visible.
-- Verifica si está en el rango manipulable del UR3.
+- Elige el tapón más accesible según área visible, confianza de la detección y cuadratez del bounding box.
 
 ### 🤖 Control del UR3
 - Comunicación mediante protocolo RTDE o TCP/IP.
@@ -99,6 +100,7 @@ RecycleX/
 ![Interfaz gráfica](assets/gui.png)
 - Visualización en tiempo real del proceso.
 - Registro de eventos, detecciones y estado del robot.
+- Control de marcha y parada.
 
 ---
 
@@ -106,9 +108,9 @@ RecycleX/
 
 - Python 3.10
 - YOLOv8 (PyTorch)
-- OpenCV, NumPy, PyQt5
+- OpenCV (Headless), NumPy, PyQt5
 - URControl vía RTDE / TCP/IP
-- Cámara HD (ej. Intel RealSense)
+- Cámara HD 2D
 
 ---
 
@@ -139,10 +141,10 @@ Esto abrirá la interfaz gráfica y comenzará el proceso automatizado de detecc
 
 ## 📈 Resultados Esperados
 
-- ✔️ Precisión de agarre > 90%
-- ⏱️ Tiempo de ciclo por tapón < 12 s
+- ✔️ Precisión de agarre > 98%
+- ⏱️ Tiempo de ciclo por tapón < 13 s
 - 🔁 Procesamiento iterativo continuo
-- 🧩 Robustez ante variaciones de color/forma
+- 🧩 Robustez ante variaciones de color/tamaño
 
 ---
 
