@@ -71,8 +71,7 @@ RecycleX/
 │   └── output/                         # Resultados y visualizaciones de calibración
 │
 ├── auxiliar.py                         # Script de funciones auxiliares útiles para el control del UR3
-├── cam.py                              # Script para el correcto posicionamiento de la cámara al comienzo
-│
+└── cam.py                              # Script para el correcto posicionamiento de la cámara al comienzo
 ```
 
 ---
