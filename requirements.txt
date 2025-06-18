@@ -1,7 +1,6 @@
+ur-rtde
 opencv-python-headless
-pyqt5
-torch
-ultralytics
 numpy
+PyQt5
 matplotlib
-Pillow
+ultralytics
