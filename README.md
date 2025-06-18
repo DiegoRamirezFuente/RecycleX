@@ -149,18 +149,26 @@ Antes de ejecutar el sistema, asegúrate de seguir los siguientes pasos para una
      ```bash
      python3 cam.py
      ```
-   - Ajusta la posición de la cámara de modo que el **punto rojo de la imagen** coincida con el **punto de calibración** físico (ver plano en `assets/plano_calibracion.png` para más detalles sobre la referencia física del punto de calibración).
+   - Ajusta la posición de la cámara de modo que el **punto rojo de la imagen** coincida con el **punto de calibración** físico (ver plano de calibración más abajo para identificar la posición exacta).
 
 4. **Colocación del entorno físico**:
    - Coloca la **ventosa mediana** como herramienta del robot, alineada lo más perpendicular posible a la superficie de la mesa.
-   - Sitúa los **depósitos de colores** y la **caja con los tapones** siguiendo las posiciones indicadas en el plano adjunto (`assets/plano_colocacion.png`).
+   - Sitúa los **depósitos de colores** y la **caja con los tapones** siguiendo las posiciones indicadas en el plano de colocación que se muestra a continuación.
 
 ### 📐 Planos de Referencia
 
-<p align="center">
-  <img src="assets/plano_calibracion.png" alt="Plano de calibración" width="45%" />
-  <img src="assets/plano_colocacion.png" alt="Plano de colocación" width="45%" />
-</p>
+<table>
+  <tr>
+    <td align="center">
+      <img src="assets/plano_calibracion.png" alt="Plano de calibración" width="90%"/><br/>
+      <strong>Plano de calibración</strong>
+    </td>
+    <td align="center">
+      <img src="assets/plano_colocacion.png" alt="Plano de colocación" width="90%"/><br/>
+      <strong>Plano de colocación de elementos</strong>
+    </td>
+  </tr>
+</table>
 
 5. **Ejecución del sistema**:
    - Una vez preparado todo el entorno, ejecuta:
