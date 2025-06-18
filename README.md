@@ -129,14 +129,49 @@ RecycleX/
 
 ---
 
-## ▶️ Ejecución
+## 🧪 Puesta en Marcha del Sistema
 
-Para lanzar la aplicación completa:
-```bash
-cd RecycleX/FinalCode
-python3 main.py
-```
-Esto abrirá la interfaz gráfica y comenzará el proceso automatizado de detección, clasificación y depósito.
+Antes de ejecutar el sistema, asegúrate de seguir los siguientes pasos para una correcta configuración física y lógica:
+
+1. **Conexiones iniciales**:
+   - Conecta el robot **UR3** al PC mediante **Ethernet**.
+   - Conecta la **cámara** al PC a través del **puerto USB-C**.
+
+2. **Posicionamiento inicial del robot**:
+   - Ejecuta el script auxiliar:
+     ```bash
+     python3 auxiliar.py
+     ```
+   - En el menú que aparece, selecciona la **opción 2** para colocar el robot en la **posición de toma de imagen**.
+
+3. **Alineación de la cámara**:
+   - Lanza la visualización de la cámara:
+     ```bash
+     python3 cam.py
+     ```
+   - Ajusta la posición de la cámara de modo que el **punto rojo de la imagen** coincida con el **punto de calibración** físico (ver plano en `assets/plano_calibracion.png` para más detalles sobre la referencia física del punto de calibración).
+
+4. **Colocación del entorno físico**:
+   - Coloca la **ventosa mediana** como herramienta del robot, alineada lo más perpendicular posible a la superficie de la mesa.
+   - Sitúa los **depósitos de colores** y la **caja con los tapones** siguiendo las posiciones indicadas en el plano adjunto (`assets/plano_colocacion.png`).
+
+### 📐 Planos de Referencia
+
+<p align="center">
+  <img src="assets/plano_calibracion.png" alt="Plano de calibración" width="45%" />
+  <img src="assets/plano_colocacion.png" alt="Plano de colocación" width="45%" />
+</p>
+
+5. **Ejecución del sistema**:
+   - Una vez preparado todo el entorno, ejecuta:
+     ```bash
+     python3 main.py
+     ```
+   - Se abrirá la interfaz gráfica:
+     - Pulsa **Start** para comenzar el ciclo de clasificación.
+     - Al finalizar, pulsa **Fin** para detener el proceso de forma segura.
+
+> ⚠️ Asegúrate de haber realizado todos los pasos anteriores antes de iniciar el sistema para evitar errores en la detección o la manipulación de tapones.
 
 ---
 
