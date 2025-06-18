@@ -115,7 +115,22 @@ RecycleX/
 
 ---
 
+## 🖥️ Entorno de Desarrollo
+
+El sistema fue desarrollado y probado bajo el siguiente entorno:
+
+```bash
+$ lsb_release -a
+Distributor ID: Ubuntu  
+Description:    Ubuntu 22.04.5 LTS  
+Release:        22.04  
+Codename:       jammy
+```
+---
+
 ## 🚀 Instalación
+
+El sistema fue desarrollado y probado en **22.04.5 LTS (Jammy)**.
 
 1. Clona el repositorio:
    ```bash
