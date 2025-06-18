@@ -106,7 +106,7 @@ RecycleX/
 ---
 
 ## 🛠️ Requisitos
-
+- Ubuntu 22.04.5 LTS (Jammy)
 - Python 3.10
 - YOLOv8 (PyTorch)
 - OpenCV (Headless), NumPy, PyQt5
@@ -116,8 +116,6 @@ RecycleX/
 ---
 
 ## 🚀 Instalación
-
-El sistema fue desarrollado y probado en **Ubuntu 22.04.5 LTS (Jammy)**.
 
 1. Clona el repositorio:
    ```bash
