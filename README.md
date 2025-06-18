@@ -165,6 +165,7 @@ Antes de ejecutar el sistema, asegúrate de seguir los siguientes pasos para una
 5. **Ejecución del sistema**:
    - Una vez preparado todo el entorno, ejecuta:
      ```bash
+     cd RecycleX/FinalCode/
      python3 main.py
      ```
    - Se abrirá la interfaz gráfica:
